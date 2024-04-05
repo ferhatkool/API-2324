@@ -1,0 +1,18 @@
+{% layout "layouts/base.liquid" %}
+
+{% block head %}
+    <title>
+        {{ title }}
+    </title>
+{% endblock %}
+
+{% block content %}
+    <p>Hello World</p>
+    <p> {{ access_token }}</p>
+    <p> {{ refresh_token }}</p>
+    <p> {{ artist }}</p>
+{% endblock %}
+
+{% block footer %}
+    
+{% endblock %}
