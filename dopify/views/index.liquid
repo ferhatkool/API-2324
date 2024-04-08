@@ -7,10 +7,43 @@
 {% endblock %}
 
 {% block content %}
-    <p>Hello World</p>
-    <p> {{ access_token }}</p>
-    <p> {{ refresh_token }}</p>
-    <p> {{ artist }}</p>
+    
+    {% if access_token == undefined %}
+        <p>Welcome! Please sign in.</p>
+        <a href="http://localhost:8500/login" class="button">Login</a>
+    {% elsif access_token != undefined %}
+    
+        <p>Welcome {{ profile_name }}</p>
+        <a href="http://localhost:8500/refresh_token" class="button">Refresh Token</a>
+        <a href="http://localhost:8500/logout" class="button">Logout...</a>
+        <p>Your access token is: {{ access_token }}</p>
+        <p>Your refresh_token is: {{ refresh_token }}</p>
+        <b>{{ track_artist }}</b>
+        <p>{{ track_title }}</p>
+        <img src= {{ track_cover }}>
+        
+
+        <h1>Spotify Web Playback SDK Quick Start</h1>
+        <button id="togglePlay">Toggle Play</button>
+        <button id="switchDevice">Play on this device</button>
+        <button id="next">Next</button>
+        <button id="previous">Previous</button>
+        <label>
+            volume slider
+            <input id="volumeSlider" type="range" min="0" max="1" step=".001" value=".5" name="volume" class="slider" orient="horizontal">	
+        </label>
+        <label>
+            seek
+            <input id="seek" type="range" min="0" max="1" step=".001" value=".5" name="seek" class="slider" orient="horizontal">	
+        </label>
+        <p id="timestamp"></p>
+        <img id="album">
+        <h2 id="artistname"></h2>
+        <p id="trackname"></p>
+        <script src="https://sdk.scdn.co/spotify-player.js"></script>
+        <script src="./slider.js"></script>
+        <script src="./script.js"></script>
+    {% endif %}
 {% endblock %}
 
 {% block footer %}
