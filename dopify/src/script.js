@@ -1,5 +1,20 @@
 console.log('Script loaded successfully!');
 
+document.querySelector('#sendNotification').addEventListener("click", () => {
+  console.log('Dit bestaat dus wel, okay.')
+  if (Notification.permission === "granted") {
+    const notification = new Notification("Het werkt hoor!")
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        const notification = new Notification("Notificaties staan aan!");
+      }
+    })
+  }
+})  
+
+
+
 function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);
@@ -16,6 +31,66 @@ function millisToMinutesAndSeconds(millis) {
     }
     return null; // Return null if the cookie is not found
   }
+
+  let device_id_var = null
+
+  function playThisTrack(albumId, trackPosition) {
+    const token = getCookie('access_token')
+
+    // switch to Dopify on click
+    // fetch('https://api.spotify.com/v1/me/player', {
+    //   method: 'PUT',
+    //   headers: {
+    //       'Authorization': 'Bearer ' + getCookie('access_token'),
+    //       'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //       "device_ids": [
+    //           device_id_var
+    //       ]
+    //   })
+    // })
+
+    // play track 
+    fetch('https://api.spotify.com/v1/me/player/play?device_id=' + device_id_var, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'context_uri': 'spotify:album:' + albumId,
+        "offset": {
+          "position": trackPosition
+        },
+        'position_ms': 0
+      })
+    })
+
+  }
+
+  function playThisPlaylist(playlistId, trackPosition) {
+    const token = getCookie('access_token')
+    fetch('https://api.spotify.com/v1/me/player/play?device_id=' + device_id_var, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'context_uri': 'spotify:playlist:' + playlistId + '?market=NL',
+        "offset": {
+          "position": trackPosition
+        },
+        'position_ms': 0
+      })
+    })
+
+  }
+  
+
+  let previousTrack = null
+  
   
   window.onSpotifyWebPlaybackSDKReady = () => {
     device_id_test = ""
@@ -31,6 +106,7 @@ function millisToMinutesAndSeconds(millis) {
       // Ready
       player.addListener('ready', ({ device_id }) => {
         device_id_test = device_id
+        device_id_var = device_id
         console.log('Ready with Device ID', device_id);
       });
   
@@ -60,17 +136,66 @@ function millisToMinutesAndSeconds(millis) {
     player.connect();
   
     function update(changedStateEvent) {
-      console.log(changedStateEvent);
+      // console.log(changedStateEvent);
       player.getCurrentState().then(state => {
         if (!state) {
           console.error('User is not playing music through the Web Playback SDK');
           return;
         }
-        console.log(state)
+        //console.log(state)
         document.getElementById("album").src = state.track_window.current_track.album['images'][2]["url"];
         document.getElementById("trackname").innerHTML = state.track_window.current_track['name'];
         document.getElementById("artistname").innerHTML = state.track_window.current_track['artists'][0]['name'];
-  
+
+        const currentTrack = state.track_window.current_track;
+        const trackTitleElement = document.getElementById('trackname');
+
+        // Check if the current track is different from the previous track
+        if (currentTrack && currentTrack.uri !== previousTrack) {
+          trackTitleElement.textContent = currentTrack.name;
+          fetch(currentTrack['artists'][0]['url'], {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('access_token'),
+            },
+          })
+          .then(response => {
+            // Check if the response is successful (status code 200)
+            if (response.ok) {
+              // Parse the JSON response
+              return response.json();
+            } else {
+              // If the response is not successful, throw an error
+              throw new Error('Failed to fetch data');
+            }
+          })
+          .then(data => {
+            if (Notification.permission === "granted") {     
+              const trackNotification = new Notification(
+                'Now playing: '.concat(currentTrack.name + ' from ' + currentTrack['artists'][0]['name']),{
+                  //icon: currentTrack['artists'][0]['url'],
+                  //icon: currentTrack.album['images'][2]["url"],
+                  icon: data.images[0].url,
+                  image: currentTrack.album['images'][2]["url"],
+                  
+                })
+            } else if (Notification.permission !== "denied") {
+              Notification.requestPermission().then((permission) => {
+                if (permission === "granted") {
+                  const trackNotification = new Notification(
+                    'Now playing: '.concat(currentTrack.name + ' from ' + currentTrack['artists'][0]['name']),{
+                      //icon: currentTrack['artists'][0]['url'],
+                      //icon: currentTrack.album['images'][2]["url"],
+                      icon: data.images[0].url,
+                      image: currentTrack.album['images'][2]["url"],
+                  })
+                }
+              })
+            }
+          })
+          previousTrack = currentTrack.uri;
+        }
+
         const test3 = document.getElementById('seek')
         test3.addEventListener('change', function() {
           const test = document.documentElement.style.getPropertyValue('--seek')
@@ -150,5 +275,58 @@ function millisToMinutesAndSeconds(millis) {
         console.log('Previous!')
       });
     };
-  }
+
+    let repeatValue = 0
+    let repeatState;
+    document.getElementById('repeat').onclick = function() {
+      
+      if (repeatValue == 0) {
+        console.log('Shuffle 1')
+        repeatState = 'context'
+        repeatValue = repeatValue + 1
+      } else if (repeatValue == 1) {
+        console.log('Shuffle 2')
+        repeatState = 'track'
+
+        repeatValue = repeatValue + 1
+      } else if (repeatValue == 2) {
+        console.log('Shuffle 3')
+        repeatState = 'off'
+
+        repeatValue = repeatValue - 2
+      }
+
+      fetch('https://api.spotify.com/v1/me/player/repeat?state=' + repeatState + '&device_id=' + device_id_test, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('access_token')
+            },
+        })   
+    }
+
+    let shuffleValue = 0
+    let shuffleState;
+    document.getElementById('shuffle').onclick = function() {
+      if (shuffleState == true) {
+
+      } else if (shuffleState == false) {
+
+      }
+    }
+
+    // document.querySelector('#sendNotification').addEventListener("click", () => {
+    //   if (Notification.permission === "granted") {
+    //     const notification = new Notification("Het werkt hoor!")
+    //   } else if (Notification.permission !== "denied") {
+    //     Notification.requestPermission().then((permission) => {
+    //       if (permission === "granted") {
+    //         const notification = new Notification("Notificaties staan aan!");
+    //       }
+    //     })
+    //   }
+    // })  
+
+
+}
+  
   

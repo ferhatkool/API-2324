@@ -1,0 +1,77 @@
+:root {
+    --black: avenirBlack;
+    --heavy: avenirHeavy;
+    --regular: avenirRegular;
+    --light: avenirBook;
+}
+
+
+
+.all-tracks {
+    height: 14rem;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    display: inline-flex;
+    width: 100%;
+}
+
+.track-group {
+    background-color: blanchedalmond;
+    display: grid;
+    grid-template-columns: 10rem;
+    grid-template-rows: 10rem 1rem 1rem ;
+    font-family: var(--regular);
+    margin: .6rem .8rem 0 0;
+}
+
+.track-group img {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    display: inline-block;
+}
+
+.track-group b {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 0.8rem;
+    margin: 0px
+}
+
+.track-group p {
+    grid-column: 1;
+    grid-row: 3;
+    font-size: 0.8rem;
+    margin: 0px
+}
+
+.all-playlists {
+    height: 13rem;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    display: inline-flex;
+    width: 100%;
+}
+
+.playlist-group {
+    background-color: aquamarine;
+    display: grid;
+    grid-template-columns: 10rem;
+    grid-template-rows: 10rem 1rem;
+    font-family: var(--regular);
+    margin: .6rem .8rem 0 0;
+}
+
+.playlist-group img {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    display: inline-block;
+}
+
+.playlist-group p {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 0.8rem;
+    margin: 0px
+}

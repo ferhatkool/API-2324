@@ -2,6 +2,10 @@ import * as dotenv from '@tinyhttp/dotenv'
 import { App } from '@tinyhttp/app';
 import { logger } from '@tinyhttp/logger';
 import { parse, serialize } from '@tinyhttp/cookie'
+
+import { createServer } from 'https'
+import fs from 'fs'
+
 //import { cookieParser, JSONCookie, JSONCookies, signedCookie, signedCookies } from '@tinyhttp/cookie-parser'
 import serveStatic from 'serve-static';
 import path from 'path';
@@ -15,6 +19,7 @@ import crypto from 'crypto'
 import cors from 'cors'
 import querystring from 'querystring'
 import cookieparser from 'cookie-parser'
+import { log } from 'console';
 
 const test = dotenv.config({path:'../token.env'})
 var client_id = process.env.client_id
@@ -25,7 +30,10 @@ var profile_name = ''
 var track_artist = ''
 var track_title = ''
 var track_cover = ''
+var playlist_name = ''
+var playlist_cover = ''
 
+// const data = []
 // spotify shizzle
 const generateRandomString = (length) => {
     return crypto
@@ -57,7 +65,59 @@ app
     .use(cookieparser())
     .listen(8500);
   
-app.get('/', (req, res) => {
+// function getTrackInformation(req, trackId) {
+//       const url = 'https://api.spotify.com/v1/tracks/' + trackId + '?market=NL';
+//       const token = "Bearer ".concat(req.cookies.access_token);
+//       const options = {
+//         method: 'GET',
+//         headers: {
+//           'Authorization': token
+//         }
+//       };
+    
+//       fetch(url, options)
+//       .then(response => {
+//         // Check if the response is successful (status code 200)
+//         if (response.ok) {
+//           // Parse the JSON response
+//           return response.json();
+//         } else {
+//           // If the response is not successful, throw an error
+//           throw new Error('Failed to fetch data');
+//         }
+//       })
+//       .then(data => {
+//         console.log(data)
+//         // Handle the retrieved data
+//         //console.log('Retrieved data:', data);
+//         track_artist = data.artists[0].name
+//         track_title = data.album.name
+//         track_cover = data.album.images[0].url
+    
+//       })
+//     }
+// function createTrackObjects(trackUrls, options) {
+//   const trackObjects = trackUrls.map((trackUrl) => {
+//     console.log(trackUrl)
+//     console.log(options)
+//     return fetch(trackUrl, options).then(res => res.json())
+//   });
+
+//   return Promise.all(trackObjects)
+// }
+
+function createTrackObjects(trackIds, options) {
+  const trackObjects = trackIds.map((trackId) => {
+    console.log(trackId)
+    console.log(options)
+    var trackUrl = 'https://api.spotify.com/v1/tracks/' + trackId + '?market=NL'
+    return fetch(trackUrl, options).then(res => res.json())
+  });
+
+  return Promise.all(trackObjects)
+}
+
+app.get('/', async (req, res) => {
   
   //console.log(req.cookies.access_token)
     //console.log(req);
@@ -68,7 +128,16 @@ app.get('/', (req, res) => {
     //console.log(req.cookies.access_token)
     if (req.cookies.access_token) {
       // Define the URL for the Spotify API endpoint
-      const url = 'https://api.spotify.com/v1/tracks/0Rv6Qk5lM1krVa8vWyrATj?market=NL';
+      // const trackIds = [
+      //   'https://api.spotify.com/v1/tracks/0Rv6Qk5lM1krVa8vWyrATj?market=NL',
+      //   'https://api.spotify.com/v1/tracks/0uHrMbMv3c78398pIANDqR?market=NL',
+      // ];
+      const trackIds = [
+        '0Rv6Qk5lM1krVa8vWyrATj',
+        '0uHrMbMv3c78398pIANDqR',
+        '27IxsagisMzK85kLiG3Ham',
+      ]
+      
     
       // Define the authorization token
       const token = "Bearer ".concat(req.cookies.access_token);
@@ -82,7 +151,56 @@ app.get('/', (req, res) => {
       };
 
       // Make the fetch request
-      fetch(url, options)
+      // const data = fetch(trackurl, options)
+      //   .then(response => {
+      //     // Check if the response is successful (status code 200)
+      //     if (response.ok) {
+      //       // Parse the JSON response
+      //       return response.json();
+      //     } else {
+      //       // If the response is not successful, throw an error
+      //       throw new Error('Failed to fetch data');
+      //     }
+      //   })
+
+
+
+        //const data = await fetch(trackIds[0], options).then(res => res.json());
+
+        const tracks = await createTrackObjects(trackIds, options)
+
+        console.log(tracks)
+
+        // console.log(data);
+
+        // .then(data => {
+        //   console.log(data)
+        //   // Handle the retrieved data
+        //   //console.log('Retrieved data:', data);
+        //   // track_artist = data.artists[0].name
+        //   // track_title = data.album.name
+        //   // track_cover = data.album.images[0].url
+          
+        //   //res.json(data)
+        //   // Now you can do whatever you want with the data
+        // })
+        // .catch(error => {
+        //   // Handle any errors that occur during the fetch request
+        //   console.error('Error:', error.message);
+        // });
+        const playlisturl = 'https://api.spotify.com/v1/playlists/557OhUWEAHkqKsdXJgQ5Zt?market=NL';
+        // Define the authorization token
+        // const token = "Bearer ".concat(req.cookies.access_token);
+  
+        // // Define options for the fetch request
+        // const options = {
+        //   method: 'GET',
+        //   headers: {
+        //     'Authorization': token
+        //   }
+        // };
+  
+        fetch(playlisturl, options)
         .then(response => {
           // Check if the response is successful (status code 200)
           if (response.ok) {
@@ -93,32 +211,33 @@ app.get('/', (req, res) => {
             throw new Error('Failed to fetch data');
           }
         })
-        .then(data => {
-          // Handle the retrieved data
-          //console.log('Retrieved data:', data);
-          track_artist = data.artists[0].name
-          track_title = data.album.name
-          track_cover = data.album.images[0].url
-          //res.json(data)
-          // Now you can do whatever you want with the data
+        .then(playlistdata => {
+          // console.log(playlistdata)
+          playlist_name = playlistdata.name
+          // console.log(playlistdata.tracks.items[0])
+          playlist_cover = playlistdata.images[0].url
+  
         })
-        .catch(error => {
-          // Handle any errors that occur during the fetch request
-          console.error('Error:', error.message);
-        });
+  
+      // const data = {
+      //   title: 'Dopify', 
+      //   access_token: req.cookies.access_token, 
+      //   refresh_token: req.cookies.refresh_token,
+      //   profile_name: profile_name,
+      //   track_artist: track_artist,
+      //   track_title: track_title,
+      //   track_cover: track_cover,
+      //   playlist_name: playlist_name,
+      //   playlist_cover: playlist_cover,
+      // }
+      return res.send(renderTemplate('views/index.liquid', {title: 'Dopify', accessToken: true, tracks}));
       }
-    const data = {
-      title: 'Dopify', 
-      access_token: req.cookies.access_token, 
-      refresh_token: req.cookies.refresh_token,
-      profile_name: profile_name,
-      track_artist: track_artist,
-      track_title: track_title,
-      track_cover: track_cover
-    }
 
-    return res.send(renderTemplate('views/index.liquid', data));
 });
+// const createTrackObjects = async (trackUrls) => {
+  
+// }
+
 
 app.get('/login', function(req, res) {
 
@@ -169,8 +288,6 @@ app.get('/callback', function(req, res) {
         json: true
       };
 
-      
-  
       request.post(authOptions, function(error, response, body) {
         if (!error && response.statusCode === 200) {
 
@@ -180,27 +297,9 @@ app.get('/callback', function(req, res) {
           var access_token = body.access_token,
               refresh_token = body.refresh_token;
         
-          //window.localStorage.setItem('access_token', access_token)
-          //console.log(access_token)
-          // res.set(
-          //   'Set-Cookie',
-          // serialize('access_token', String(access_token), {
-          //   httpOnly: true,
-          //   maxAge: 60 * 60 // 1 hour
-          // }))
-          // res.set(
-          //   'Set-Cookie',
-          // serialize('refresh_token', String(refresh_token), {
-          //   httpOnly: true,
-          //   maxAge: 60 * 60 * 24 // 1 day
-          // }))
           res.cookie('access_token', access_token, {maxAge: 3600 * 1000, httpOnly: false}) // 1 hour
           res.cookie('refresh_token', refresh_token, {maxAge: 86400 * 1000, httpOnly: true}) // 1 day
-          //access_token_temp = access_token
-          //console.log(refresh_token)
-          //refresh_token_temp = refresh_token
           
-
           var options = {
             url: 'https://api.spotify.com/v1/me',
             headers: { 'Authorization': 'Bearer ' + access_token },

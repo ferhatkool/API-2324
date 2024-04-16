@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="166" height="253" viewBox="0 0 166 253">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #707070;
+        stroke: #707070;
+        stroke-linecap: round;
+      }
+
+      .cls-2 {
+        stroke: none;
+      }
+
+      .cls-3 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <g id="Pause" transform="translate(-285 -739)">
+    <g id="Right" class="cls-1" transform="translate(405 739)">
+      <rect class="cls-2" width="46" height="253" rx="14"/>
+      <rect class="cls-3" x="0.5" y="0.5" width="45" height="252" rx="13.5"/>
+    </g>
+    <g id="Left" class="cls-1" transform="translate(285 739)">
+      <rect class="cls-2" width="46" height="253" rx="14"/>
+      <rect class="cls-3" x="0.5" y="0.5" width="45" height="252" rx="13.5"/>
+    </g>
+  </g>
+</svg>
