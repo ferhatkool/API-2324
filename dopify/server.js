@@ -26,13 +26,6 @@ var client_id = process.env.client_id
 var client_secret = process.env.client_secret
 var redirect_uri = 'http://localhost:8500/callback'; // Your redirect uri
 
-var profile_name = ''
-var track_artist = ''
-var track_title = ''
-var track_cover = ''
-var playlist_name = ''
-var playlist_cover = ''
-
 // const data = []
 // spotify shizzle
 const generateRandomString = (length) => {
@@ -108,8 +101,8 @@ app
 
 function createTrackObjects(trackIds, options) {
   const trackObjects = trackIds.map((trackId) => {
-    console.log(trackId)
-    console.log(options)
+    // console.log(trackId)
+    // console.log(options)
     var trackUrl = 'https://api.spotify.com/v1/tracks/' + trackId + '?market=NL'
     return fetch(trackUrl, options).then(res => res.json())
   });
@@ -117,28 +110,70 @@ function createTrackObjects(trackIds, options) {
   return Promise.all(trackObjects)
 }
 
-app.get('/', async (req, res) => {
-  
-  //console.log(req.cookies.access_token)
-    //console.log(req);
-    //console.log('yooo')
-    //res.send('Hello World!');
-    //console.log(access_token_temp)
+function createPlaylistObject(playlistIds, options) {
+  const playlistObjects = playlistIds.map((playlistId) => {
+    // console.log(playlistId)
+    // console.log(options)
+    var playlistUrl = 'https://api.spotify.com/v1/playlists/' + playlistId + '?market=NL'
+    return fetch(playlistUrl, options).then(res => res.json())
+  });
 
-    //console.log(req.cookies.access_token)
+  return Promise.all(playlistObjects)
+}
+
+app.get('/', async (req, res) => {
     if (req.cookies.access_token) {
-      // Define the URL for the Spotify API endpoint
-      // const trackIds = [
-      //   'https://api.spotify.com/v1/tracks/0Rv6Qk5lM1krVa8vWyrATj?market=NL',
-      //   'https://api.spotify.com/v1/tracks/0uHrMbMv3c78398pIANDqR?market=NL',
-      // ];
       const trackIds = [
         '0Rv6Qk5lM1krVa8vWyrATj',
-        '0uHrMbMv3c78398pIANDqR',
         '27IxsagisMzK85kLiG3Ham',
+        '0uHrMbMv3c78398pIANDqR',
+        '3bzay4OfqLDujCzt2SnYQe',
+        '3ZGY7R6XLdlUMpA2uR2NGa',
+        '5ODeLdBfyPQj4f1nDJEbmE',
+        '7CGY0SjXwObMWabcUuihUD',
+        '4FeeQcxvLYNJN923fgp0zz',
+        '76EpojR09zjVX00daVTxsM',
+        '7E361kU543bSeuqOgNNZsX',
+        '7dflWTlUpZ9fslrNIXB5eG',
+        '3PNMhWdZ8WTaNLHHA7A9qX',
+        '2fV1pNG8V7D60qNljC5Jcb',
+        '3389Xco9E7PuZqNwEHTXPE',
+        '4N0Y6CKJKDBOSAmJe0UJmc',
+        '3mINB5AjmLGWMtqe9AtRmD',
+        '6VgggntPiIzuQjt5iLSojV',
+        '4mMup4UphNpkvEf98V3Pzy',
+        '3aunNpSWTsWKkkjVU5QZlF',
+        '2Ja6dTeqsDx8YFAR1ojmpx',
+        '5pgQRiuJ0dKnimS6wkpNfA',
+        '6XK6qCTQgLT0FiyFqq7BIO',
+        '44VVjvGpTO2RhGRx0MKxZo',
+        '4uRbp37AtiweQtd4Ov7om3',
+        '3iWjps0VuLY8m0DcWXB4kz',
+        '5uBTDwpgkR7NPUAtucEGmW',
+        '4Tz5h4M9dEVTJPk1x2kImp',
+        '2qVUv3F22WBqWFjbbTNB6r',
+      ];
+
+      const playlistIds = [
+        '37i9dQZEVXbi9CZwpH1kj4',
+        '557OhUWEAHkqKsdXJgQ5Zt',
+        '2BX34DOcDREOf1ymxnAi0M',
+        '3acn3tYRdInXICKkWtBdkv',
+        '4DyGdxFYRkV76utcwiseTQ',
+        '4zHDt33wIOJrK9XGpTq7aj',
+        '5x7ab2yisuqH8ZTxeIkeny',
+        '7pu2LlALXtTH6N75XKDpcd',
+        '6hsoaqOXnkqRFIIRvQnH9R',
+        '7u2pYDnhUA4b3QI8z4BCSb',
+        '5enmmCmKB0p3CSb1jI3zL6',
+        '6l8BRHX0I4vvpXTc8WYc1s',
+        '37i9dQZF1EJsVN1kGVg5Ey',
+        '74muPbcmDAMaqX4nsG3omF',
+        '5WauXfTccc7nGwtbo081bM',
+        '7IKXHFHKPPi45G8TPYBWbP',
+        '3HUceOyFMFfta1ZwHUArOP',
       ]
-      
-    
+       
       // Define the authorization token
       const token = "Bearer ".concat(req.cookies.access_token);
 
@@ -150,88 +185,39 @@ app.get('/', async (req, res) => {
         }
       };
 
-      // Make the fetch request
-      // const data = fetch(trackurl, options)
-      //   .then(response => {
-      //     // Check if the response is successful (status code 200)
-      //     if (response.ok) {
-      //       // Parse the JSON response
-      //       return response.json();
-      //     } else {
-      //       // If the response is not successful, throw an error
-      //       throw new Error('Failed to fetch data');
-      //     }
-      //   })
-
-
-
-        //const data = await fetch(trackIds[0], options).then(res => res.json());
-
         const tracks = await createTrackObjects(trackIds, options)
 
-        console.log(tracks)
+        const playlists = await createPlaylistObject(playlistIds, options)
 
-        // console.log(data);
+        const profile_name = req.cookies.profile_name
 
-        // .then(data => {
-        //   console.log(data)
-        //   // Handle the retrieved data
-        //   //console.log('Retrieved data:', data);
-        //   // track_artist = data.artists[0].name
-        //   // track_title = data.album.name
-        //   // track_cover = data.album.images[0].url
-          
-        //   //res.json(data)
-        //   // Now you can do whatever you want with the data
-        // })
-        // .catch(error => {
-        //   // Handle any errors that occur during the fetch request
-        //   console.error('Error:', error.message);
-        // });
-        const playlisturl = 'https://api.spotify.com/v1/playlists/557OhUWEAHkqKsdXJgQ5Zt?market=NL';
-        // Define the authorization token
-        // const token = "Bearer ".concat(req.cookies.access_token);
+        // console.log(tracks)
+
+        // const playlisturl = 'https://api.spotify.com/v1/playlists/557OhUWEAHkqKsdXJgQ5Zt?market=NL';
   
-        // // Define options for the fetch request
-        // const options = {
-        //   method: 'GET',
-        //   headers: {
-        //     'Authorization': token
+        // fetch(playlisturl, options)
+        // .then(response => {
+        //   // Check if the response is successful (status code 200)
+        //   if (response.ok) {
+        //     // Parse the JSON response
+        //     return response.json();
+        //   } else {
+        //     // If the response is not successful, throw an error
+        //     throw new Error('Failed to fetch data');
         //   }
-        // };
+        // })
+        // .then(playlistdata => {
+        //   // console.log(playlistdata)
+        //   playlist_name = playlistdata.name
+        //   // console.log(playlistdata.tracks.items[0])
+        //   playlist_cover = playlistdata.images[0].url
   
-        fetch(playlisturl, options)
-        .then(response => {
-          // Check if the response is successful (status code 200)
-          if (response.ok) {
-            // Parse the JSON response
-            return response.json();
-          } else {
-            // If the response is not successful, throw an error
-            throw new Error('Failed to fetch data');
-          }
-        })
-        .then(playlistdata => {
-          // console.log(playlistdata)
-          playlist_name = playlistdata.name
-          // console.log(playlistdata.tracks.items[0])
-          playlist_cover = playlistdata.images[0].url
-  
-        })
-  
-      // const data = {
-      //   title: 'Dopify', 
-      //   access_token: req.cookies.access_token, 
-      //   refresh_token: req.cookies.refresh_token,
-      //   profile_name: profile_name,
-      //   track_artist: track_artist,
-      //   track_title: track_title,
-      //   track_cover: track_cover,
-      //   playlist_name: playlist_name,
-      //   playlist_cover: playlist_cover,
-      // }
-      return res.send(renderTemplate('views/index.liquid', {title: 'Dopify', accessToken: true, tracks}));
-      }
+        // })
+
+      return res.send(renderTemplate('views/index.liquid', {title: 'Dopify', accessToken: true, tracks, playlists, profile_name}));
+    } else if (!req.cookies.access_token) {
+      return res.send(renderTemplate('views/index.liquid', {title: 'Dopify', accessToken: false}));
+    }
 
 });
 // const createTrackObjects = async (trackUrls) => {
@@ -288,17 +274,21 @@ app.get('/callback', function(req, res) {
         json: true
       };
 
+      
+
       request.post(authOptions, function(error, response, body) {
         if (!error && response.statusCode === 200) {
 
-          console.log(response)
-          console.log(body)
+          // console.log(response)
+          // console.log(body)
   
           var access_token = body.access_token,
               refresh_token = body.refresh_token;
+              
         
           res.cookie('access_token', access_token, {maxAge: 3600 * 1000, httpOnly: false}) // 1 hour
           res.cookie('refresh_token', refresh_token, {maxAge: 86400 * 1000, httpOnly: true}) // 1 day
+          
           
           var options = {
             url: 'https://api.spotify.com/v1/me',
@@ -309,14 +299,14 @@ app.get('/callback', function(req, res) {
           // use the access token to access the Spotify Web API
           request.get(options, function(error, response, body) {
             console.log(body);
-            profile_name = body.display_name
-            
+            var profile_name = body.display_name;
+            res.cookie('profile_name', profile_name, {maxAge: 86400 * 1000, httpOnly: false})
+            res.redirect('/')
           });
-
+          
           //res.cookie('display_name', body.display_name, {maxAge: 86400, httpOnly: true}) // 1 day
           
           // we can also pass the token to the browser to make requests from there
-          return res.redirect('/')
             
         } else {
           res.redirect('/#' +
@@ -370,58 +360,9 @@ app.get('/get-user-info', function(req, res) {
 app.get('/logout', function(req, res) {
   res.clearCookie('access_token')
   res.clearCookie('refresh_token')
-  res.clearCookie('display_name')
+  res.clearCookie('profile_name')
   res.redirect('/')
 })
-
-// NOT USED ANYMORE !!!
-app.get('/data', async (req, res) => {
-    try {
-      // Define the URL for the Spotify API endpoint
-      const url = 'https://api.spotify.com/v1/tracks/0Rv6Qk5lM1krVa8vWyrATj?market=NL';
-  
-      // Define the authorization token
-      const token = "Bearer ".concat(req.cookies.access_token);
-  
-      // Define options for the fetch request
-      const options = {
-        method: 'GET',
-        headers: {
-          'Authorization': token
-        }
-      };
-  
-      // Make the fetch request
-      fetch(url, options)
-        .then(response => {
-          // Check if the response is successful (status code 200)
-          if (response.ok) {
-            // Parse the JSON response
-            return response.json();
-          } else {
-            // If the response is not successful, throw an error
-            throw new Error('Failed to fetch data');
-          }
-        })
-        .then(data => {
-          // Handle the retrieved data
-          //console.log('Retrieved data:', data);
-          track_artist = data.artists[0].name
-          track_title = data.album.name
-          track_cover = data.album.images[0].url
-          res.redirect('/')
-          //res.json(data)
-          // Now you can do whatever you want with the data
-        })
-        .catch(error => {
-          // Handle any errors that occur during the fetch request
-          console.error('Error:', error.message);
-        });
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        res.status(500).send('Error fetching data');
-    }
-  });
 
 const renderTemplate = (template, data) => {
     return engine.renderFileSync(template, data)

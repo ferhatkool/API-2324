@@ -1,17 +1,17 @@
 console.log('Script loaded successfully!');
 
-document.querySelector('#sendNotification').addEventListener("click", () => {
-  console.log('Dit bestaat dus wel, okay.')
-  if (Notification.permission === "granted") {
-    const notification = new Notification("Het werkt hoor!")
-  } else if (Notification.permission !== "denied") {
-    Notification.requestPermission().then((permission) => {
-      if (permission === "granted") {
-        const notification = new Notification("Notificaties staan aan!");
-      }
-    })
-  }
-})  
+// document.querySelector('#sendNotification').addEventListener("click", () => {
+//   console.log('Dit bestaat dus wel, okay.')
+//   if (Notification.permission === "granted") {
+//     const notification = new Notification("Het werkt hoor!")
+//   } else if (Notification.permission !== "denied") {
+//     Notification.requestPermission().then((permission) => {
+//       if (permission === "granted") {
+//         const notification = new Notification("Notificaties staan aan!");
+//       }
+//     })
+//   }
+// })  
 
 
 
@@ -279,18 +279,17 @@ function millisToMinutesAndSeconds(millis) {
     let repeatValue = 0
     let repeatState;
     document.getElementById('repeat').onclick = function() {
-      
       if (repeatValue == 0) {
-        console.log('Shuffle 1')
+        console.log('Repeat 1')
         repeatState = 'context'
         repeatValue = repeatValue + 1
       } else if (repeatValue == 1) {
-        console.log('Shuffle 2')
+        console.log('Repeat 2')
         repeatState = 'track'
 
         repeatValue = repeatValue + 1
       } else if (repeatValue == 2) {
-        console.log('Shuffle 3')
+        console.log('Repeat 3')
         repeatState = 'off'
 
         repeatValue = repeatValue - 2
@@ -307,11 +306,22 @@ function millisToMinutesAndSeconds(millis) {
     let shuffleValue = 0
     let shuffleState;
     document.getElementById('shuffle').onclick = function() {
-      if (shuffleState == true) {
+      if (shuffleValue == 0) {
+        console.log('Shuffle 1')
+        shuffleState = 'true'
+        shuffleValue = shuffleValue + 1
+      } else if (shuffleValue == 1) {
+        console.log('Shuffle 2')
+        shuffleState = 'false'
+        shuffleValue = shuffleValue - 1
+      } 
 
-      } else if (shuffleState == false) {
-
-      }
+      fetch('https://api.spotify.com/v1/me/player/shuffle?state=' + shuffleState + '&device_id=' + device_id_test, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + getCookie('access_token')
+            },
+        })   
     }
 
     // document.querySelector('#sendNotification').addEventListener("click", () => {
