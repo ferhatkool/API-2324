@@ -121,6 +121,17 @@ function createPlaylistObject(playlistIds, options) {
   return Promise.all(playlistObjects)
 }
 
+function createQueueObject(options) {
+  var queueUrl = 'https://api.spotify.com/v1/me/player/queue'
+  return fetch(queueUrl, options).then(res => res.json())
+  // const queueObjects = 
+}
+
+function createRecentlyPlayedObject(options) {
+  var recentlyPlayedUrl = 'https://api.spotify.com/v1/me/player/recently-played?limit=50'
+  return fetch(recentlyPlayedUrl, options).then(res => res.json())
+}
+
 app.get('/', async (req, res) => {
     if (req.cookies.access_token) {
       const trackIds = [
@@ -152,6 +163,7 @@ app.get('/', async (req, res) => {
         '5uBTDwpgkR7NPUAtucEGmW',
         '4Tz5h4M9dEVTJPk1x2kImp',
         '2qVUv3F22WBqWFjbbTNB6r',
+        '0VP8dYPm6cytBsj7zCy83r',
       ];
 
       const playlistIds = [
@@ -189,12 +201,29 @@ app.get('/', async (req, res) => {
 
         const playlists = await createPlaylistObject(playlistIds, options)
 
+        const queue = await createQueueObject(options)
+
+        const recentlyPlayed = await createRecentlyPlayedObject(options)
+
+        console.log(recentlyPlayed.items[2].track.album.id)
+        console.log(recentlyPlayed.items[2].track.album.images[1].url)
+        console.log(recentlyPlayed.items[2].track.artists[0].name)
+        console.log(recentlyPlayed.items[2].track.name)
+        
+        
+        // console.log(queue.queue[2].album)
+        // console.log(queue.queue[2].artists)
+        // console.log(queue.queue[2].album.id)
+        // console.log('test')
+        // console.log(queue.queue[0].album.name)
+        
+
         const profile_name = req.cookies.profile_name
 
         // console.log(tracks)
 
         // const playlisturl = 'https://api.spotify.com/v1/playlists/557OhUWEAHkqKsdXJgQ5Zt?market=NL';
-  
+      
         // fetch(playlisturl, options)
         // .then(response => {
         //   // Check if the response is successful (status code 200)
@@ -214,7 +243,7 @@ app.get('/', async (req, res) => {
   
         // })
 
-      return res.send(renderTemplate('views/index.liquid', {title: 'Dopify', accessToken: true, tracks, playlists, profile_name}));
+      return res.send(renderTemplate('views/index.liquid', {title: 'Dopify', accessToken: true, tracks, playlists, queue, recentlyPlayed, profile_name}));
     } else if (!req.cookies.access_token) {
       return res.send(renderTemplate('views/index.liquid', {title: 'Dopify', accessToken: false}));
     }
@@ -231,7 +260,7 @@ app.get('/login', function(req, res) {
     res.cookie(stateKey, state);
   
     // your application requests authorization
-    var scope = 'user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming';
+    var scope = 'user-read-recently-played user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming';
     res.redirect('https://accounts.spotify.com/authorize?' +
       querystring.stringify({
         response_type: 'code',

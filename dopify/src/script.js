@@ -37,20 +37,6 @@ function millisToMinutesAndSeconds(millis) {
   function playThisTrack(albumId, trackPosition) {
     const token = getCookie('access_token')
 
-    // switch to Dopify on click
-    // fetch('https://api.spotify.com/v1/me/player', {
-    //   method: 'PUT',
-    //   headers: {
-    //       'Authorization': 'Bearer ' + getCookie('access_token'),
-    //       'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //       "device_ids": [
-    //           device_id_var
-    //       ]
-    //   })
-    // })
-
     // play track 
     fetch('https://api.spotify.com/v1/me/player/play?device_id=' + device_id_var, {
       method: 'PUT',
