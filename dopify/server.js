@@ -128,7 +128,7 @@ function createQueueObject(options) {
 }
 
 function createRecentlyPlayedObject(options) {
-  var recentlyPlayedUrl = 'https://api.spotify.com/v1/me/player/recently-played?limit=50'
+  var recentlyPlayedUrl = 'https://api.spotify.com/v1/me/player/recently-played?limit=15'
   return fetch(recentlyPlayedUrl, options).then(res => res.json())
 }
 
@@ -137,7 +137,11 @@ app.get('/', async (req, res) => {
       const trackIds = [
         '0Rv6Qk5lM1krVa8vWyrATj',
         '27IxsagisMzK85kLiG3Ham',
+        '2Ys7qaDAMTbgmHZRJxmeBZ',
+        '2vXXwb50oBHXzguiX5rh7p',
+        '48pSdEaap5rLkSmWjScQQS',
         '0uHrMbMv3c78398pIANDqR',
+        '6YHtcC9r1TQ4NDEVqu84KM',
         '3bzay4OfqLDujCzt2SnYQe',
         '3ZGY7R6XLdlUMpA2uR2NGa',
         '5ODeLdBfyPQj4f1nDJEbmE',
@@ -205,18 +209,16 @@ app.get('/', async (req, res) => {
 
         const recentlyPlayed = await createRecentlyPlayedObject(options)
 
-        console.log(recentlyPlayed.items[2].track.album.id)
-        console.log(recentlyPlayed.items[2].track.album.images[1].url)
-        console.log(recentlyPlayed.items[2].track.artists[0].name)
-        console.log(recentlyPlayed.items[2].track.name)
-        
-        
-        // console.log(queue.queue[2].album)
-        // console.log(queue.queue[2].artists)
-        // console.log(queue.queue[2].album.id)
-        // console.log('test')
-        // console.log(queue.queue[0].album.name)
-        
+        console.log(recentlyPlayed)
+
+        // const tracks = ''
+
+        // const playlists = ''
+
+        // const queue = ''
+
+        // const recentlyPlayed = ''
+
 
         const profile_name = req.cookies.profile_name
 

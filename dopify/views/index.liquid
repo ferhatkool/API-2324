@@ -9,101 +9,227 @@
 {% block content %}
     
     {% if accessToken == false %}
-        <p>Welcome! Please sign in.</p>
-        <a href="http://localhost:8500/login" class="button">Login</a>
+        <div class="startPage">
+            <img class="startLogo" src="./png/spotify-logo.png"> 
+            <p class="startTitle">Welcome to Dopify! Please login in with your Spotify account.</p>
+            <a href="http://localhost:8500/login" class="button startButton">Login</a>
+        </div>
     {% elsif accessToken == true %}
-    
-        <p>Welcome {{ profile_name }}</p>
-        <a href="http://localhost:8500/refresh_token" class="button">Refresh Token</a>
-        <a href="http://localhost:8500/logout" class="button">Logout...</a>
+        <div class="header">
+            <h1>Welcome {{ profile_name }}</h1>
+            <a href="http://localhost:8500/refresh_token" class="button">Refresh Token</a>
+            <a href="http://localhost:8500/logout" class="button">Logout...</a>
+        </div>
+        <main>
+            <h2>Top Picks</h2>
         <div class="all-tracks">
+            
             {% for track in tracks %}
-                <section onclick="playThisTrack('{{ track.album.id }}', 0)" class="track-group">
+                <section class="track-group">
                 <b>{{ track.artists[0].name }}</b>
                 <p>{{ track.name }}</p>
-                <img src= {{ track.album.images[0].url }}>
+                <div>
+                    <svg onclick="playThisTrack('{{ track.album.id }}', 0)" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 107 107">
+                        <g id="PlayWithBackground" transform="translate(-556 -630)">
+                            <circle fill="#1DB954" id="BackgroundPlay" cx="53.5" cy="53.5" r="53.5" transform="translate(556 630)"/>
+                            <path id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(636 650) rotate(90)" fill="#000"/>
+                        </g>
+                    </svg>
+                    <img src= {{ track.album.images[0].url }}>
+                </div>
+                
             </section>
             {% endfor %}
         </div>
 
+        <h2>Playlists</h2>
+
         <div class="all-playlists">
+            
             {% for playlist in playlists %}
-                <section onclick="playThisPlaylist('{{ playlist.id }}', 0)" class="playlist-group">
+                <section class="playlist-group">
                     <p>{{ playlist.name }}</p>
-                    <img src = {{ playlist.images[0].url }}>
+                    <div>
+                        <svg onclick="playThisPlaylist('{{ playlist.id }}', 0)" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 107 107">
+                            <g id="PlayWithBackground" transform="translate(-556 -630)">
+                                <circle fill="#1DB954" id="BackgroundPlay" cx="53.5" cy="53.5" r="53.5" transform="translate(556 630)"/>
+                                <path id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(636 650) rotate(90)" fill="#000"/>
+                            </g>
+                        </svg>
+                        <img src = {{ playlist.images[0].url }}>
+                    </div>
+                    
                 </section>
             {% endfor %}
         </div>
+        </main>
 
-        <h1>Spotify Web Playback SDK Quick Start</h1>
-        <button id="togglePlay">
-            <svg xmlns="http://www.w3.org/2000/svg" width="41" height="45" viewBox="0 0 41 67">
-                <path id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(41) rotate(90)"/>
-            </svg>
+        <div class="mediaControls">
+            <img id="album">
+            <p id="trackname"></p> 
+            <p id="artistname"></p>
+            <div>
 
-        </button>
-        {% comment %} <button id="switchDevice">Play on this device</button> {% endcomment %}
-        <button id="switchDevice">
-            <svg xmlns="http://www.w3.org/2000/svg" width="58.401" height="40" viewBox="0 0 58.401 48.564">
-                <path id="Devices" d="M516.936,378.3h4.676v-4.918h-7.253V378.3ZM565.6,335.712a6.112,6.112,0,0,0-6.3-5.979H535.258a6.112,6.112,0,0,0-6.3,5.979v36.56a6.112,6.112,0,0,0,6.3,5.979H559.3a6.111,6.111,0,0,0,6.3-5.979Zm-5.153,0v36.56a1.089,1.089,0,0,1-1.145,1.07H535.258a1.09,1.09,0,0,1-1.146-1.07v-36.56a1.09,1.09,0,0,1,1.146-1.07H559.3A1.089,1.089,0,0,1,560.45,335.712Zm-13.169,18.366a7.026,7.026,0,1,1-7.348,7.014A7.158,7.158,0,0,1,547.281,354.078Zm-28.246-24.345H513.5a6.092,6.092,0,0,0-6.3,5.934v22.612a6.093,6.093,0,0,0,6.3,5.935h8.112V359.3H513.5a1.071,1.071,0,0,1-1.145-1.026V335.667a1.071,1.071,0,0,1,1.145-1.025h8.112v-4.909Zm28.246,10.208a3.513,3.513,0,1,1-3.721,3.5A3.652,3.652,0,0,1,547.281,339.941Z" transform="translate(-507.202 -329.733)" fill-rule="evenodd"/>
-            </svg>
-        </button>
-        <button id="next">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48.122" height="40" viewBox="0 0 48.122 48.138">
-                <path id="Next" d="M550.855,891.159V872.6a1.653,1.653,0,0,1,1.7-1.665h6.964a1.634,1.634,0,0,1,1.607,1.665v44.809a1.633,1.633,0,0,1-1.607,1.664h-6.964a1.653,1.653,0,0,1-1.7-1.664V898.844l-33.927,19.6a2.591,2.591,0,0,1-2.589,0A2.62,2.62,0,0,1,513,916.2V873.8a2.635,2.635,0,0,1,3.928-2.237Z" transform="translate(-513 -870.932)" fill-rule="evenodd"/>
-            </svg>
-        </button>
-        <button id="previous">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48.122" height="40" viewBox="0 0 48.122 48.138">
-                <path id="Previous" d="M279.145,898.843v18.562a1.653,1.653,0,0,1-1.7,1.665h-6.964a1.634,1.634,0,0,1-1.607-1.665V872.6a1.633,1.633,0,0,1,1.607-1.664h6.964a1.653,1.653,0,0,1,1.7,1.664v18.562l33.927-19.6a2.591,2.591,0,0,1,2.589,0A2.62,2.62,0,0,1,317,873.8v42.4a2.635,2.635,0,0,1-3.928,2.237Z" transform="translate(-268.878 -870.932)" fill-rule="evenodd"/>
-            </svg>
-        </button>
-        <button id="repeat">
-            <svg xmlns="http://www.w3.org/2000/svg" width="56.206" height="40" viewBox="0 0 56.206 51.148">
-                <path id="Replay" d="M58.56,368.515l3.083-2.94a2.549,2.549,0,0,0,0-3.738,2.878,2.878,0,0,0-3.932,0l-9.61,9.137,9.61,9.138a2.9,2.9,0,0,0,3.932,0,2.56,2.56,0,0,0,0-3.748l-3.083-2.931h11.3c7.319,0,13.264-5.662,13.264-12.622V342.346c0-6.96-5.945-12.613-13.264-12.613H40.19c-7.329,0-13.274,5.653-13.274,12.613v18.465c0,6.96,5.945,12.622,13.274,12.622h2.634v-4.918H40.19a7.915,7.915,0,0,1-8.1-7.7V342.346a7.915,7.915,0,0,1,8.1-7.7H69.858a7.921,7.921,0,0,1,8.1,7.7v18.465a7.921,7.921,0,0,1-8.1,7.7Z" transform="translate(-26.916 -329.733)" fill-rule="evenodd"/>
-            </svg>
-        </button>
-        <button id="shuffle">
-            <svg xmlns="http://www.w3.org/2000/svg" width="58.115" height="40" viewBox="0 0 58.115 48.503">
-                <path id="Shuffle" d="M554.247,45.083a.247.247,0,0,1,.239.154.228.228,0,0,1-.057.272l-2.376,2.26a2.559,2.559,0,0,0,0,3.747,2.879,2.879,0,0,0,3.932,0s7.223-6.86,9.141-8.693a.613.613,0,0,0,0-.889c-1.918-1.833-9.141-8.693-9.141-8.693a2.879,2.879,0,0,0-3.932,0,2.559,2.559,0,0,0,0,3.748l2.49,2.368a.228.228,0,0,1,.058.272.247.247,0,0,1-.239.154c-1.45,0-4.847-.009-4.847-.009a7.487,7.487,0,0,1-3.9-1.452,31.093,31.093,0,0,1-5.191-4.482s-1.03-1.062-1.565-1.615a.449.449,0,0,0-.334-.145.444.444,0,0,0-.334.118c-.772.681-2.624,2.3-3.4,2.976a.41.41,0,0,0-.153.309.432.432,0,0,0,.125.327c.534.554,1.565,1.615,1.565,1.615,4.475,4.619,9.037,7.64,13.178,7.64C549.505,45.065,552.826,45.074,554.247,45.083Zm.182-34.508a.226.226,0,0,1,.057.272.261.261,0,0,1-.239.154c-1.421,0-4.742.009-4.742.009-2.91,0-6.011,1.407-9.1,3.875-3.884,3.1-7.912,7.94-11.92,12.794-3.759,4.537-7.49,9.1-11.126,12-1.918,1.534-3.722,2.641-5.526,2.641h-4.151a.46.46,0,0,0-.477.444v4.392a.467.467,0,0,0,.134.327.516.516,0,0,0,.343.127h4.151c2.92,0,6.013-1.4,9.105-3.875,3.884-3.1,7.911-7.94,11.928-12.794,3.75-4.537,7.49-9.1,11.126-12.005,1.918-1.533,3.713-2.64,5.516-2.64h.01s3.4-.009,4.847-.009a.261.261,0,0,1,.239.154.228.228,0,0,1-.058.272c-.82.789-2.49,2.377-2.49,2.377a2.549,2.549,0,0,0,0,3.738,2.879,2.879,0,0,0,3.932,0s7.223-6.86,9.141-8.693a.6.6,0,0,0,.191-.444.617.617,0,0,0-.191-.445l-9.141-8.693a2.9,2.9,0,0,0-3.932,0,2.56,2.56,0,0,0,0,3.748S553.637,9.813,554.429,10.575Zm-44.44,3.185h1.841c1.6,0,3.207.889,4.9,2.15a45.745,45.745,0,0,1,6.5,6.27l1.488,1.679a.474.474,0,0,0,.325.154.464.464,0,0,0,.343-.1c.8-.644,2.72-2.187,3.531-2.831a.447.447,0,0,0,.057-.635c-.515-.581-1.5-1.679-1.5-1.679a44.231,44.231,0,0,0-8.846-8.085,12.912,12.912,0,0,0-6.8-2.223H507.2v5.3Z" transform="translate(-507.202 -3.79)" fill-rule="evenodd"/>
-            </svg>
-        </button>
+                {% comment %} <button id="switchDevice">Play on this device</button> {% endcomment %}
+                <button id="shuffle">
+                    <svg id="shuffleState1" style="display: block" xmlns="http://www.w3.org/2000/svg" width="58.115" height="40" viewBox="0 0 58.115 48.503">
+                        <path fill="#fff" id="Shuffle" d="M554.247,45.083a.247.247,0,0,1,.239.154.228.228,0,0,1-.057.272l-2.376,2.26a2.559,2.559,0,0,0,0,3.747,2.879,2.879,0,0,0,3.932,0s7.223-6.86,9.141-8.693a.613.613,0,0,0,0-.889c-1.918-1.833-9.141-8.693-9.141-8.693a2.879,2.879,0,0,0-3.932,0,2.559,2.559,0,0,0,0,3.748l2.49,2.368a.228.228,0,0,1,.058.272.247.247,0,0,1-.239.154c-1.45,0-4.847-.009-4.847-.009a7.487,7.487,0,0,1-3.9-1.452,31.093,31.093,0,0,1-5.191-4.482s-1.03-1.062-1.565-1.615a.449.449,0,0,0-.334-.145.444.444,0,0,0-.334.118c-.772.681-2.624,2.3-3.4,2.976a.41.41,0,0,0-.153.309.432.432,0,0,0,.125.327c.534.554,1.565,1.615,1.565,1.615,4.475,4.619,9.037,7.64,13.178,7.64C549.505,45.065,552.826,45.074,554.247,45.083Zm.182-34.508a.226.226,0,0,1,.057.272.261.261,0,0,1-.239.154c-1.421,0-4.742.009-4.742.009-2.91,0-6.011,1.407-9.1,3.875-3.884,3.1-7.912,7.94-11.92,12.794-3.759,4.537-7.49,9.1-11.126,12-1.918,1.534-3.722,2.641-5.526,2.641h-4.151a.46.46,0,0,0-.477.444v4.392a.467.467,0,0,0,.134.327.516.516,0,0,0,.343.127h4.151c2.92,0,6.013-1.4,9.105-3.875,3.884-3.1,7.911-7.94,11.928-12.794,3.75-4.537,7.49-9.1,11.126-12.005,1.918-1.533,3.713-2.64,5.516-2.64h.01s3.4-.009,4.847-.009a.261.261,0,0,1,.239.154.228.228,0,0,1-.058.272c-.82.789-2.49,2.377-2.49,2.377a2.549,2.549,0,0,0,0,3.738,2.879,2.879,0,0,0,3.932,0s7.223-6.86,9.141-8.693a.6.6,0,0,0,.191-.444.617.617,0,0,0-.191-.445l-9.141-8.693a2.9,2.9,0,0,0-3.932,0,2.56,2.56,0,0,0,0,3.748S553.637,9.813,554.429,10.575Zm-44.44,3.185h1.841c1.6,0,3.207.889,4.9,2.15a45.745,45.745,0,0,1,6.5,6.27l1.488,1.679a.474.474,0,0,0,.325.154.464.464,0,0,0,.343-.1c.8-.644,2.72-2.187,3.531-2.831a.447.447,0,0,0,.057-.635c-.515-.581-1.5-1.679-1.5-1.679a44.231,44.231,0,0,0-8.846-8.085,12.912,12.912,0,0,0-6.8-2.223H507.2v5.3Z" transform="translate(-507.202 -3.79)" fill-rule="evenodd"/>
+                    </svg>
+                    <svg id="shuffleState2" style="display: none"  xmlns="http://www.w3.org/2000/svg" width="58.115" height="40" viewBox="0 0 58.115 48.503">
+                        <path fill="#1DB954" id="Shuffle" d="M554.247,45.083a.247.247,0,0,1,.239.154.228.228,0,0,1-.057.272l-2.376,2.26a2.559,2.559,0,0,0,0,3.747,2.879,2.879,0,0,0,3.932,0s7.223-6.86,9.141-8.693a.613.613,0,0,0,0-.889c-1.918-1.833-9.141-8.693-9.141-8.693a2.879,2.879,0,0,0-3.932,0,2.559,2.559,0,0,0,0,3.748l2.49,2.368a.228.228,0,0,1,.058.272.247.247,0,0,1-.239.154c-1.45,0-4.847-.009-4.847-.009a7.487,7.487,0,0,1-3.9-1.452,31.093,31.093,0,0,1-5.191-4.482s-1.03-1.062-1.565-1.615a.449.449,0,0,0-.334-.145.444.444,0,0,0-.334.118c-.772.681-2.624,2.3-3.4,2.976a.41.41,0,0,0-.153.309.432.432,0,0,0,.125.327c.534.554,1.565,1.615,1.565,1.615,4.475,4.619,9.037,7.64,13.178,7.64C549.505,45.065,552.826,45.074,554.247,45.083Zm.182-34.508a.226.226,0,0,1,.057.272.261.261,0,0,1-.239.154c-1.421,0-4.742.009-4.742.009-2.91,0-6.011,1.407-9.1,3.875-3.884,3.1-7.912,7.94-11.92,12.794-3.759,4.537-7.49,9.1-11.126,12-1.918,1.534-3.722,2.641-5.526,2.641h-4.151a.46.46,0,0,0-.477.444v4.392a.467.467,0,0,0,.134.327.516.516,0,0,0,.343.127h4.151c2.92,0,6.013-1.4,9.105-3.875,3.884-3.1,7.911-7.94,11.928-12.794,3.75-4.537,7.49-9.1,11.126-12.005,1.918-1.533,3.713-2.64,5.516-2.64h.01s3.4-.009,4.847-.009a.261.261,0,0,1,.239.154.228.228,0,0,1-.058.272c-.82.789-2.49,2.377-2.49,2.377a2.549,2.549,0,0,0,0,3.738,2.879,2.879,0,0,0,3.932,0s7.223-6.86,9.141-8.693a.6.6,0,0,0,.191-.444.617.617,0,0,0-.191-.445l-9.141-8.693a2.9,2.9,0,0,0-3.932,0,2.56,2.56,0,0,0,0,3.748S553.637,9.813,554.429,10.575Zm-44.44,3.185h1.841c1.6,0,3.207.889,4.9,2.15a45.745,45.745,0,0,1,6.5,6.27l1.488,1.679a.474.474,0,0,0,.325.154.464.464,0,0,0,.343-.1c.8-.644,2.72-2.187,3.531-2.831a.447.447,0,0,0,.057-.635c-.515-.581-1.5-1.679-1.5-1.679a44.231,44.231,0,0,0-8.846-8.085,12.912,12.912,0,0,0-6.8-2.223H507.2v5.3Z" transform="translate(-507.202 -3.79)" fill-rule="evenodd"/>
+                    </svg>
+                </button>
+                <button id="previous">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48.122" height="40" viewBox="0 0 48.122 48.138">
+                        <path fill="#fff" id="Previous" d="M279.145,898.843v18.562a1.653,1.653,0,0,1-1.7,1.665h-6.964a1.634,1.634,0,0,1-1.607-1.665V872.6a1.633,1.633,0,0,1,1.607-1.664h6.964a1.653,1.653,0,0,1,1.7,1.664v18.562l33.927-19.6a2.591,2.591,0,0,1,2.589,0A2.62,2.62,0,0,1,317,873.8v42.4a2.635,2.635,0,0,1-3.928,2.237Z" transform="translate(-268.878 -870.932)" fill-rule="evenodd"/>
+                    </svg>
+                </button>
+                <button id="togglePlay">
+                    <svg id="togglePlayState1" style="display: block" xmlns="http://www.w3.org/2000/svg" width="41" height="45" viewBox="0 0 41 67">
+                        <path fill="#fff" id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(41) rotate(90)"/>
+                    </svg>
+                    <svg id="togglePlayState2" style="display: none" xmlns="http://www.w3.org/2000/svg" width="41" height="45" viewBox="0 0 41 67">
+                        <g id="Pause" transform="translate(-285 -739)">
+                            <rect fill="#fff" id="Right" width="11" height="59" rx="5.5" transform="translate(313 739)"/>
+                            <rect fill="#fff" id="Left" width="11" height="59" rx="5.5" transform="translate(285 739)"/>
+                        </g>
+                    </svg>
 
-        <input type="checkbox" id="queueButton" checked>
-        <div id="queue">
+                </button>
+                <button id="next">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48.122" height="40" viewBox="0 0 48.122 48.138">
+                        <path fill="#fff" id="Next" d="M550.855,891.159V872.6a1.653,1.653,0,0,1,1.7-1.665h6.964a1.634,1.634,0,0,1,1.607,1.665v44.809a1.633,1.633,0,0,1-1.607,1.664h-6.964a1.653,1.653,0,0,1-1.7-1.664V898.844l-33.927,19.6a2.591,2.591,0,0,1-2.589,0A2.62,2.62,0,0,1,513,916.2V873.8a2.635,2.635,0,0,1,3.928-2.237Z" transform="translate(-513 -870.932)" fill-rule="evenodd"/>
+                    </svg>
+                </button>
+                <button id="repeat">
+                    <svg id="repeatState1" style="display: block;" xmlns="http://www.w3.org/2000/svg" width="56.206" height="40" viewBox="0 0 56.206 51.148">
+                        <path fill="#fff" id="Replay" d="M58.56,368.515l3.083-2.94a2.549,2.549,0,0,0,0-3.738,2.878,2.878,0,0,0-3.932,0l-9.61,9.137,9.61,9.138a2.9,2.9,0,0,0,3.932,0,2.56,2.56,0,0,0,0-3.748l-3.083-2.931h11.3c7.319,0,13.264-5.662,13.264-12.622V342.346c0-6.96-5.945-12.613-13.264-12.613H40.19c-7.329,0-13.274,5.653-13.274,12.613v18.465c0,6.96,5.945,12.622,13.274,12.622h2.634v-4.918H40.19a7.915,7.915,0,0,1-8.1-7.7V342.346a7.915,7.915,0,0,1,8.1-7.7H69.858a7.921,7.921,0,0,1,8.1,7.7v18.465a7.921,7.921,0,0,1-8.1,7.7Z" transform="translate(-26.916 -329.733)" fill-rule="evenodd"/>
+                    </svg>
+                    <svg id="repeatState2" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="56.206" height="40" viewBox="0 0 56.206 51.148">
+                        <path fill="#1DB954" id="Replay" d="M58.56,368.515l3.083-2.94a2.549,2.549,0,0,0,0-3.738,2.878,2.878,0,0,0-3.932,0l-9.61,9.137,9.61,9.138a2.9,2.9,0,0,0,3.932,0,2.56,2.56,0,0,0,0-3.748l-3.083-2.931h11.3c7.319,0,13.264-5.662,13.264-12.622V342.346c0-6.96-5.945-12.613-13.264-12.613H40.19c-7.329,0-13.274,5.653-13.274,12.613v18.465c0,6.96,5.945,12.622,13.274,12.622h2.634v-4.918H40.19a7.915,7.915,0,0,1-8.1-7.7V342.346a7.915,7.915,0,0,1,8.1-7.7H69.858a7.921,7.921,0,0,1,8.1,7.7v18.465a7.921,7.921,0,0,1-8.1,7.7Z" transform="translate(-26.916 -329.733)" fill-rule="evenodd"/>
+                    </svg>
+                    <svg id="repeatState3" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="56.206" height="48" viewBox="0 0 56.206 61.881">
+                        <g id="ReplayState2" transform="translate(-325.916 -148)">
+                            <path fill="#1DB954" id="Replay" d="M58.56,368.515l3.083-2.94a2.549,2.549,0,0,0,0-3.738,2.878,2.878,0,0,0-3.932,0l-9.61,9.137,9.61,9.138a2.9,2.9,0,0,0,3.932,0,2.56,2.56,0,0,0,0-3.748l-3.083-2.931h11.3c7.319,0,13.264-5.662,13.264-12.622V342.346c0-6.96-5.945-12.613-13.264-12.613H40.19c-7.329,0-13.274,5.653-13.274,12.613v18.465c0,6.96,5.945,12.622,13.274,12.622h2.634v-4.918H40.19a7.915,7.915,0,0,1-8.1-7.7V342.346a7.915,7.915,0,0,1,8.1-7.7H69.858a7.921,7.921,0,0,1,8.1,7.7v18.465a7.921,7.921,0,0,1-8.1,7.7Z" transform="translate(299 -171)" fill-rule="evenodd"/>
+                            <rect fill="var(--backgroundColorSite)" id="BackgroundNumber" width="17" height="28" transform="translate(346 148)" fill="#fff"/>
+                            <text fill="#1DB954" id="Number" transform="translate(345 169)" font-size="28" font-family="var(--black)" font-weight="300"><tspan x="0" y="0">1</tspan></text>
+                        </g>
+                    </svg>
+
+                </button>
+
+                <p id="timestamp"></p>
+                <label>
+                    <input id="seek" type="range" min="0" max="1" step=".001" value=".5" name="seek" class="slider" orient="horizontal">	
+                </label>   
+                <p id="duration"></p>
+            </div>
+           
+    
+            {% comment %} <input type="checkbox" id="queueButton"> {% endcomment %}
+            <button id="switchDevice">
+                <svg xmlns="http://www.w3.org/2000/svg" width="58.401" height="40" viewBox="0 0 58.401 48.564">
+                    <path fill="#fff" id="Devices" d="M516.936,378.3h4.676v-4.918h-7.253V378.3ZM565.6,335.712a6.112,6.112,0,0,0-6.3-5.979H535.258a6.112,6.112,0,0,0-6.3,5.979v36.56a6.112,6.112,0,0,0,6.3,5.979H559.3a6.111,6.111,0,0,0,6.3-5.979Zm-5.153,0v36.56a1.089,1.089,0,0,1-1.145,1.07H535.258a1.09,1.09,0,0,1-1.146-1.07v-36.56a1.09,1.09,0,0,1,1.146-1.07H559.3A1.089,1.089,0,0,1,560.45,335.712Zm-13.169,18.366a7.026,7.026,0,1,1-7.348,7.014A7.158,7.158,0,0,1,547.281,354.078Zm-28.246-24.345H513.5a6.092,6.092,0,0,0-6.3,5.934v22.612a6.093,6.093,0,0,0,6.3,5.935h8.112V359.3H513.5a1.071,1.071,0,0,1-1.145-1.026V335.667a1.071,1.071,0,0,1,1.145-1.025h8.112v-4.909Zm28.246,10.208a3.513,3.513,0,1,1-3.721,3.5A3.652,3.652,0,0,1,547.281,339.941Z" transform="translate(-507.202 -329.733)" fill-rule="evenodd"/>
+                </svg>
+            </button>
+
+            <button id="queueButton" onclick="openCloseQueue()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50.175" height="40" viewBox="0 0 50.175 45.978">
+                <path fill="#fff" id="Queue" d="M316.1,700.471a.327.327,0,0,0-.344-.318H270.328a.324.324,0,0,0-.334.318v4.655a.33.33,0,0,0,.334.317h45.423a.333.333,0,0,0,.344-.317Zm0-14.392a.333.333,0,0,0-.344-.317H270.328a.33.33,0,0,0-.334.317v4.655a.33.33,0,0,0,.334.318h45.423a.333.333,0,0,0,.344-.318Zm-48.1-18.3a8.531,8.531,0,0,1,8.732-8.312H309.4a8.32,8.32,0,1,1,0,16.615H276.732A8.529,8.529,0,0,1,268,667.777Zm5.563,0a3.092,3.092,0,0,1,3.169-3.012H309.4a3.016,3.016,0,1,1,0,6.025H276.732A3.1,3.1,0,0,1,273.563,667.777Z" transform="translate(-268 -659.465)" fill-rule="evenodd"/>
+              </svg>              
+            </button> 
+
+            <button id="volumeButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="57.725" height="40" viewBox="0 0 57.725 54.171">
+                    <path fill="#fff" id="Volume" d="M264.3,24.009a20.654,20.654,0,0,0,.047,6.461,11.034,11.034,0,0,0,5.64,7.849l28,15.5a2.94,2.94,0,0,0,2.8,0,2.624,2.624,0,0,0,1.393-2.287V2.649a2.638,2.638,0,0,0-1.393-2.3,2.916,2.916,0,0,0-2.8.009s-19.686,10.889-28,15.489a11.049,11.049,0,0,0-5.64,7.858ZM306.757,7.4a.287.287,0,0,1,.143-.254.313.313,0,0,1,.3-.036,21.387,21.387,0,0,1,14.6,19.972,21.4,21.4,0,0,1-14.6,19.981.34.34,0,0,1-.3-.036.323.323,0,0,1-.143-.254V41.839a.552.552,0,0,1,.324-.5,15.963,15.963,0,0,0,9.151-14.255,15.95,15.95,0,0,0-9.151-14.246.565.565,0,0,1-.324-.508ZM269.845,24.544v-.018a5.762,5.762,0,0,1,2.94-4.092L296.6,7.249V46.222a.4.4,0,0,1-.21.354.432.432,0,0,1-.42,0c-6.374-3.53-17.472-9.664-23.188-12.831a5.762,5.762,0,0,1-2.94-4.092,15.918,15.918,0,0,1,0-5.127Zm36.912-6.914a.336.336,0,0,1,.19-.3.364.364,0,0,1,.372.036,11.939,11.939,0,0,1,0,19.446.386.386,0,0,1-.372.027.333.333,0,0,1-.19-.29ZM264.3,24l.039-.272c-.01.091-.03.181-.039.272l-.114.7.114-.69Z" transform="translate(-264.07)" fill-rule="evenodd"/>
+                </svg>
+            </button>
+ 
+            <label id="volumeSliderLabel">
+                <input id="volumeSlider" type="range" min="0" max="1" step=".001" value=".5" name="volume" class="slider" orient="horizontal">	
+            </label>
+
+            
+            
+     
+        </div>
+
+
+        <div id="queue" class="queueClosed">
             <label>
                 Queue
-                <input type="radio" name="queueRecentlyPlayed" id="queueSelected">
+                <input type="radio" name="queueRecentlyPlayed" id="queueSelected" checked>
             </label>
             <label>
                 Recently Played
                 <input type="radio" name="queueRecentlyPlayed" id="recentlyPlayedSelected">
             </label>
 
+            <button id="queueButtonClose" onclick="openCloseQueue()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 49.497 49.498">
+                    <g id="Close" transform="translate(-265.751 -743.751)">
+                        <rect fill="#fff" id="Right" width="11" height="59" rx="5.5" transform="translate(265.751 751.529) rotate(-45)"/>
+                        <rect fill="#fff" id="Left" width="11" height="59" rx="5.5" transform="translate(307.471 743.751) rotate(45)"/>
+                    </g>
+                </svg>
+
+            </button>
+
             <div id="queueContent" class="queueRecentlyPlayedContent">
-                
                 <h3>Now Playing</h3>
-                <section onclick="playThisTrack('{{ queue.currently_playing.album.id }}', 0)" class="queue-group">
-                    <img class="queuePictures" src={{ queue.currently_playing.album.images[1].url }}>
-                    <b>{{queue.currently_playing.artists[0].name}}</b>
-                    <p>{{ queue.currently_playing.name }}</p>
-                </section>
-                
-                <h3>Next up</h3>
-                {% for track in queue.queue %}
-                    <section onclick="playThisTrack('{{ track.album.id }}', 0)" class="queue-group">
-                        <img class="queuePictures" src={{ track.album.images[1].url }}></img>
-                        <b>{{ track.artists[0].name }}</b>
-                        <p>{{ track.name }}</p>
+                {% if queue.currently_playing != null%}
+                    <section class="queueTrack queue-group">
+                        <div>
+                            <svg onclick="playThisTrack('{{ queue.currently_playing.album.id }}', 0)" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 107 107">
+                                <g id="PlayWithBackground" transform="translate(-556 -630)">
+                                    <circle fill="#1DB954" id="BackgroundPlay" cx="53.5" cy="53.5" r="53.5" transform="translate(556 630)"/>
+                                    <path id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(636 650) rotate(90)" fill="#000"/>
+                                </g>
+                            </svg>
+                            <img class="queuePictures" src={{ queue.currently_playing.album.images[1].url }}>
+                        </div>
+                        <b>{{queue.currently_playing.artists[0].name}}</b>
+                        <p>{{ queue.currently_playing.name }}</p>
                     </section>
-                    
-                {% endfor %}
+                {% elsif queue.currently_playing == null %}
+                    <p>Nothing is currently playing.</p>
+                {% endif %}
+
+                <h3>Next up</h3>
+                {% if queue.queue.length != 0 %}
+                    {% for track in queue.queue %}
+                        <section class="queueTracks queue-group">
+                            <div>
+                                <svg onclick="playThisTrack('{{ track.album.id }}', 0)" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 107 107">
+                                    <g id="PlayWithBackground" transform="translate(-556 -630)">
+                                        <circle fill="#1DB954" id="BackgroundPlay" cx="53.5" cy="53.5" r="53.5" transform="translate(556 630)"/>
+                                        <path id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(636 650) rotate(90)" fill="#000"/>
+                                    </g>
+                                </svg>
+                                <img class="queuePictures" src={{ track.album.images[1].url }}>
+                            </div>
+                            <b>{{ track.artists[0].name }}</b>
+                            <p>{{ track.name }}</p>
+                        </section>
+                    {% endfor %}
+                {% else %}
+                    <p>The queue is empty.</p>
+                {% endif %}
+            
             </div>
 
             <div id="recentlyPlayedContent" class="queueRecentlyPlayedContent">
                 {% for track in recentlyPlayed.items %}
-                    <section onclick="playThisTrack('{{ track.track.album.id }}', 0)" class="queue-group">
-                        <img class="queuePictures" src={{ track.track.album.images[1].url }}>
+                    <section class="recentlyPlayed queue-group">
+                        <div>
+                            <svg onclick="playThisTrack('{{ track.track.album.id }}', 0)" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 107 107">
+                                <g id="PlayWithBackground" transform="translate(-556 -630)">
+                                    <circle fill="#1DB954" id="BackgroundPlay" cx="53.5" cy="53.5" r="53.5" transform="translate(556 630)"/>
+                                    <path id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(636 650) rotate(90)" fill="#000"/>
+                                </g>
+                            </svg>
+                            <img class="queuePictures" src={{ track.track.album.images[1].url }}>
+                        </div>
                         <b>{{ track.track.artists[0].name }}</b>
                         <p>{{ track.track.name }}</p>
                     </section>
@@ -112,18 +238,7 @@
         </div>
 
         {% comment %} <button id="sendNotification">Push Notification</button> {% endcomment %}
-        <label>
-            volume slider
-            <input id="volumeSlider" type="range" min="0" max="1" step=".001" value=".5" name="volume" class="slider" orient="horizontal">	
-        </label>
-        <label>
-            seek
-            <input id="seek" type="range" min="0" max="1" step=".001" value=".5" name="seek" class="slider" orient="horizontal">	
-        </label>
-        <p id="timestamp"></p>
-        <img id="album">
-        <h2 id="artistname"></h2>
-        <p id="trackname"></p>
+        
         <script src="https://sdk.scdn.co/spotify-player.js"></script>
         <script src="./slider.js"></script>
         <script src="./script.js"></script>
