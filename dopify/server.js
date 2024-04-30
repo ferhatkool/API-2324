@@ -3,10 +3,6 @@ import { App } from '@tinyhttp/app';
 import { logger } from '@tinyhttp/logger';
 import { parse, serialize } from '@tinyhttp/cookie'
 
-import { createServer } from 'https'
-import fs from 'fs'
-
-//import { cookieParser, JSONCookie, JSONCookies, signedCookie, signedCookies } from '@tinyhttp/cookie-parser'
 import serveStatic from 'serve-static';
 import path from 'path';
 import { fileURLToPath } from 'url'; // Import fileURLToPath function from the 'url' module
