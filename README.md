@@ -1,14 +1,25 @@
 # API @cmda-minor-web 2023 - 2024
 ## Samenvatting
 
+## De opdracht
+
 ## Installatie
-De repository is vrijwel 'ready to use'. De enige vereiste voor de installatie van Dopify zijn NodeJS en NPM. Optioneel is Nodemon dat globaal geïnstalleerd is, maar dat wordt meer gebruikt voor testdoeleindes. Eerst moet natuurlijk de repository geclonned worden. Wanneer zowel NodeJS als NPM aanwezig zijn op het systeem, kan Dopify worden geïnstalleerd door het volgende commando te runnen in de folder van de cloned repository.
+De repository is vrijwel 'ready to use'. De enige vereiste software-componenten voor de installatie van Dopify zijn NodeJS en NPM. Optioneel is Nodemon dat globaal geïnstalleerd is, maar dat wordt meer gebruikt voor testdoeleindes. Eerst moet natuurlijk de repository geclonned worden. Het enige dat mist aan de repository is een access token en een secret token, die app gebonden zijn. [link](https://developer.spotify.com/documentation/web-api/tutorials/code-flow) Deze dienen in een file gezet te worden genaamd *token.env*, dat natuurlijk niet is meegegeven aan de repository. De structuur van de file ziet er als volgt uit:
+
+```
+client_id= { access token v/d app }
+client_secret= { secret token v/d app }
+```
+
+Vervolgens dienen er een aantal dingen te worden aangepast in twee files, namelijk *server.js* en *index.liquid*. *server.js* bevat een redirect URL dat gelijk moet zijn aan de ingestelde redirect URL in de Spotify app. Het gaat om de waarde van **redirect_uri**, dat te vinden is in regel 23. *index.liquid* bevat meerdere 'buttons' (aria labels) die ieder een href bevatten die de gebruiker ergens naar toe door verwijzen. Het is van belang dat het path onaangepast blijft, alleen de domeinnaam moet gewijzigd worden. Het gaat om de regels *15*, *20* en *21*.
+
+Als de hierboven genoemde stappen zijn uitgevoerd, kan de installatie beginnen. Wanneer zowel NodeJS als NPM aanwezig zijn op het systeem, kan Dopify worden geïnstalleerd door het volgende commando te runnen in de folder van de cloned repository.
 
 ```
 npm install
 ```
 
-Vervolgens wordt a.d.h.v. één van de volgende commando's uit te voeren in de folder genaamd Dopify, de server voor Dopify opgestart.
+Vervolgens wordt de server opgestart door één van de volgende commando's uit te voeren in de folder genaamd Dopify.
 
 ```
 --- NODE ---
@@ -18,8 +29,7 @@ node server.js
 nodemon server.js
 ```
 
-## De opdracht
-
+De server zal nu zonder problemen worden uitgevoerd.
 
 ## Gebruikte API's
 De API dat ik heb gebruikt voor de opdracht is de API van Spotify. Spotify stelt vrijwel hun hele assortiment van API's beschikbaar voor Premium gebruikers om te gebruiken als Developer. Hiervoor heb ik in de Developer Panel een app aangemaakt, die ik de naam Dopify heb gegeven. Op het moment kon ik geen andere naam bedenken en ik heb de naam van mijn tool simpelweg zo gelaten. 
