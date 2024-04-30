@@ -56,7 +56,8 @@ Nu zal *localtunnel* een URL genereren, die de website met HTTPS zal weergeven a
 #### Apache2 i.c.m. Nginx Proxy Manager
 <details>
 <summary>Klap de tekst open...</summary>
-Apache2 kan voor meerdere doeleindes worden gebruikt, zoals het hosten van een simpele website. Maar dankzij de talloze beschikbare modules kan Apache2 ook worden gebruikt als HTTPS Proxy. Apache2 dient in mijn geval als Proxy voor de NodeJS server dat draait op HTTP. De proxy zorgt ervoor dat de buiten wereld denkt een HTTPS-verbinding te hebben met de webserver en dat is voor het grootste gedeelte ook zo. Het verkeer is alleen geen HTTPS-verkeer als het vanaf de proxy naar de NodeJS webserver gaat, maar als beide services op dezelfde host worden uitgevoerd, zal het geen beveiligings-risico's met zich meebrengen. Om Apache2 te installeren moet het volgende commando worden uitgevoerd:
+
+**Apache2** kan voor meerdere doeleindes worden gebruikt, zoals het hosten van een simpele website. Maar dankzij de talloze beschikbare modules kan Apache2 ook worden gebruikt als HTTPS Proxy. Apache2 dient in mijn geval als Proxy voor de NodeJS server dat draait op HTTP. De proxy zorgt ervoor dat de buiten wereld denkt een HTTPS-verbinding te hebben met de webserver en dat is voor het grootste gedeelte ook zo. Het verkeer is alleen geen HTTPS-verkeer als het vanaf de proxy naar de NodeJS webserver gaat, maar als beide services op dezelfde host worden uitgevoerd, zal het geen beveiligings-risico's met zich meebrengen. Om Apache2 te installeren moet het volgende commando worden uitgevoerd:
 
 ```
 apt-get install apache2 -y
@@ -65,6 +66,7 @@ apt-get install apache2 -y
 Apache2 heeft een configuratie file nodig om te kunnen functioneren. Hiervoor stel ik de volgende template beschikbaar (alles tussen {} moet worden ingevuld):
 <details>
 <summary>Klap de tekst open...</summary>
+
 ```
 NameVirtualHost *:443
 <VirtualHost *:443>
@@ -86,6 +88,7 @@ NameVirtualHost *:443
   ProxyPassReverse / http://0.0.0.0:{ poortnummer }/
 </VirtualHost>
 ```
+
 </details>
 
 Dit configuratie bestand moet worden geplaatst op het pad */etc/apache2/sites-available/{ naam }.conf*. Om Apache2 te laten werken met dit configuratie bestand moeten de modules *ssl*, *proxy* en *proxy_http* worden geïnstalleerd en moet de configuratie file zelf worden geactiveerd. 
@@ -96,7 +99,24 @@ a2enmod proxy
 a2enmod proxy_http
 ```
 
-Nu moeten er nog enkele functies in Nginx Proxy Manager worden ingesteld.
+Nu is het nog niet klaar; de **Nginx Proxy Manager** moet nog worden geïnstalleerd en geconfigureerd. *Nginx Proxy Manager* wordt in mijn geval gebruikt om inkomende verkeer op te vangen en door te verwijzen naar de juiste host. Dit, omdat ik meerdere sites host op één publiek IP, waardoor ik een tool nodig heb dat het verkeer voor verschillende domeinen van elkaar kan scheiden. Daarvoor komt Nginx Proxy Manager van pas. Deze tool kijkt namelijk in de header van elk web pakketje, waar als eindbestemming het bezochte URL met daarin het bijbehorende domeinnaam staat vermeld. Door *Proxy Hosts* in te stellen weet Nginx waar bepaald verkeer heen moet. Ook kan de tool SSL certificaten voor een domein aanmaken a.d.h.v. Let's Encrypt. Maar eerst de installatie van Nginx Proxy Manager.
+
+De tool werkt op basis van Docker, een applicatie waarmee simpele Virtuele Containers gehost kunnen worden. Virtuele Containers zijn als het ware mini-computers die elk een eigen doeleind hebben/service zijn, maar dan virtueel. Mijn advies is om de guide van [Nginx Proxy Manager](https://nginxproxymanager.com/guide/#hosting-your-home-network) zelf te volgen voor de installatie van Docker en Nginx Proxy Manager. Een tip is wel om versie 2.10.4 van Ngin Proxy Manager te gebruiken, omdat er bugs in de meest recente versie zitten.
+
+Na de installatie en configuratie van Nginx Proxy Manager kan er een SSL certificaat worden gegenereerd door te navigeren naar *SSL Certificates* in de navigatiebalk, om vervolgens op de knop **Add SSL Certificate** te drukken. Het volgende dialoog verschijnt, waarin de velden *Domain Names* en *Email Address for Let's Encrypt* moeten worden ingevuld.
+
+<img src='./readme-files/nginx-ssl.png'>
+
+Als het SSL certificaat is aangemaakt kan de Proxy Host worden geconfigureerd voor de webserver. Hiervoor moet er in de navigatiebalk naar *Hosts* worden genavigeerd, wat een dropdown menu opent wanneer er op de knop wordt gedrukt. Vervolgens moet er naar *Proxy Hosts* worden genavigeerd, om daarna op de knop **Add Proxy Host** te drukken. Het volgende dialoog verschijnt, waarin in het kopje **Details** de velden *Domain Names*, *Forward Hostname / IP* en *Forward Port* moeten worden ingevuld en in het kopje **SSL** het aangemaakt certificaat onder *SSL Certificate* en *Force SSL* moeten worden geselecteerd.
+
+<img src='./readme-files/nginx-proxyhost-1.png'>
+<img src='./readme-files/nginx-proxyhost-2.png'>
+
+Nu de Proxy Host is aangemaakt, moet het SSL certificaat worden geëxporteerd en moeten de bestanden *cert1.pem*, *chain1.pem* en *privkey1.pem* op de host worden gezet waar de Apache2 service op draait, om zo de bestanden te gebruiken voor de SSL configuratie. Als alle stappen zijn doorlopen moet de Apache2 server worden herstart a.d.h.v. het volgende commando en, als deze dat nog niet is, moet de NodeJS server worden gestart.
+
+```
+systemctl restart apache2
+```
 </details>
 
  
