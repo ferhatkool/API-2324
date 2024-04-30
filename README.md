@@ -35,9 +35,9 @@ De server zal nu zonder problemen worden uitgevoerd.
 ### Publiekelijk toegankelijk
 Om de server publiekelijk toegankelijk te maken, is het vereist dat er gebruik wordt gemaakt van HTTPS. Zonder HTTPS zal de Spotify API errors geven en niet functioneren, omdat zij willen dat er gebruik wordt gemaakt van HTTPS. Voor localhost maakt het niet uit. Er zijn twee manieren, de simpele manier waarbij gebruik wordt gemaakt van een NPM-module en de ingewikkelde manier. De laatste methode heb ik gebruikt om [Dopify](https://dopify-player.nl) te hosten. 
 
-
+#### NPM-module - localtunnel
 <details>
-    <summary>#### NPM-module - localtunnel<summary>
+<summary>Klap de tekst open...</summary>
 **localtunnel** is een NPM module dat het HTTP verkeer van localhost doorstuurt naar een server van localtunnel, dat dient als HTTPS proxy. Het is namelijk onmogelijk om met *tinyhttp* gebruik te kunnen maken van SSL certificaten om HTTPS te verkrijgen op de website. Om localtunnel te installeren is het vereist om deze global te installeren, om de tool zo goed mogelijk te laten functioneren.
 
 ```
@@ -63,7 +63,8 @@ apt-get install apache2 -y
 ```
 
 Apache2 heeft een configuratie file nodig om te kunnen functioneren. Hiervoor stel ik de volgende template beschikbaar (alles tussen {} moet worden ingevuld):
-
+<details>
+<summary>Klap de tekst open...</summary>
 ```
 NameVirtualHost *:443
 <VirtualHost *:443>
@@ -85,6 +86,7 @@ NameVirtualHost *:443
   ProxyPassReverse / http://0.0.0.0:{ poortnummer }/
 </VirtualHost>
 ```
+</details>
 
 Dit configuratie bestand moet worden geplaatst op het pad */etc/apache2/sites-available/{ naam }.conf*. Om Apache2 te laten werken met dit configuratie bestand moeten de modules *ssl*, *proxy* en *proxy_http* worden geïnstalleerd en moet de configuratie file zelf worden geactiveerd. 
 ```
