@@ -33,7 +33,7 @@ nodemon server.js
 De server zal nu zonder problemen worden uitgevoerd. 
 
 ### Publiekelijk toegankelijk
-Om de server publiekelijk toegankelijk te maken, is het vereist dat er gebruik wordt gemaakt van HTTPS. Zonder HTTPS zal de Spotify API errors geven en niet functioneren, omdat zij willen dat er gebruik wordt gemaakt van HTTPS. Voor localhost maakt het niet uit. Er zijn twee manieren, de simpele manier waarbij gebruik wordt gemaakt van een NPM-module en de ingewikkelde manier, dat ik heb gebruikt om [Dopify] (https://dopify-player.nl) te hosten. 
+Om de server publiekelijk toegankelijk te maken, is het vereist dat er gebruik wordt gemaakt van HTTPS. Zonder HTTPS zal de Spotify API errors geven en niet functioneren, omdat zij willen dat er gebruik wordt gemaakt van HTTPS. Voor localhost maakt het niet uit. Er zijn twee manieren, de simpele manier waarbij gebruik wordt gemaakt van een NPM-module en de ingewikkelde manier, dat ik heb gebruikt om [Dopify](https://dopify-player.nl) te hosten. 
 
 #### NPM-module - localtunnel
 **localtunnel** is een NPM module dat het HTTP verkeer van localhost doorstuurt naar een server van localtunnel, dat dient als HTTPS proxy. Het is namelijk onmogelijk om met *tinyhttp* gebruik te kunnen maken van SSL certificaten om HTTPS te verkrijgen op de website. Om localtunnel te installeren is het vereist om deze global te installeren, om de tool zo goed mogelijk te laten functioneren.
@@ -48,7 +48,7 @@ Vervolgens moet de webserver (nodeJS of nodemon) worden gestart in een terminal,
 lt --port { poortnummer v/d server (standaard 8500) }
 ```
 
-Nu zal *localtunnel* een URL genereren, die de website met HTTPS zal weergeven aan de gebruiker dat de URL bezoekt. Let wel op, de URL is beveiligd met een wachtwoord. Het wachtwoord is het publieke [IP] (https://www.whatsmyip.org/) van het systeem waar de webserver op wordt uitgevoerd.
+Nu zal *localtunnel* een URL genereren, die de website met HTTPS zal weergeven aan de gebruiker dat de URL bezoekt. Let wel op, de URL is beveiligd met een wachtwoord. Het wachtwoord is het publieke [IP](https://www.whatsmyip.org/) van het systeem waar de webserver op wordt uitgevoerd.
 
 #### Apache2 i.c.m. Nginx Proxy Manager
 
