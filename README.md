@@ -44,7 +44,7 @@ Om de server publiekelijk toegankelijk te maken, is het vereist dat er gebruik w
 
 #### NPM-module - localtunnel
 <details>
-<summary>Klap de tekst open...</summary>
+<summary><u><b>Klap de tekst open...</b></u></summary>
 **localtunnel** is een NPM module dat het HTTP verkeer van localhost doorstuurt naar een server van localtunnel, dat dient als HTTPS proxy. Het is namelijk onmogelijk om met *tinyhttp* gebruik te kunnen maken van SSL certificaten om HTTPS te verkrijgen op de website. Om localtunnel te installeren is het vereist om deze global te installeren, om de tool zo goed mogelijk te laten functioneren.
 
 ```
@@ -62,7 +62,7 @@ Nu zal *localtunnel* een URL genereren, die de website met HTTPS zal weergeven a
 
 #### Apache2 i.c.m. Nginx Proxy Manager
 <details>
-<summary>Klap de tekst open...</summary>
+<summary><u><b>Klap de tekst open...</b></u></summary>
 
 **Apache2** kan voor meerdere doeleindes worden gebruikt, zoals het hosten van een simpele website. Maar dankzij de talloze beschikbare modules kan Apache2 ook worden gebruikt als HTTPS Proxy. Apache2 dient in mijn geval als Proxy voor de NodeJS server dat draait op HTTP. De proxy zorgt ervoor dat de buiten wereld denkt een HTTPS-verbinding te hebben met de webserver en dat is voor het grootste gedeelte ook zo. Het verkeer is alleen geen HTTPS-verkeer als het vanaf de proxy naar de NodeJS webserver gaat, maar als beide services op dezelfde host worden uitgevoerd, zal het geen beveiligings-risico's met zich meebrengen. Om Apache2 te installeren moet het volgende commando worden uitgevoerd:
 
@@ -72,7 +72,7 @@ apt-get install apache2 -y
 
 Apache2 heeft een configuratie file nodig om te kunnen functioneren. Hiervoor stel ik de volgende template beschikbaar (alles tussen {} moet worden ingevuld):
 <details>
-<summary>Klap de tekst open...</summary>
+<summary><u><b>Klap de tekst open...</b></u></summary>
 
 ```
 NameVirtualHost *:443
@@ -145,10 +145,21 @@ Als extra web API heb ik gebruik gemaakt van Notifications. Ik heb dit gebruikt 
 
 
 ### Authenticatie
+Ik begon te experimenteren van de functionaliteiten voor de Spotify authenticatie. Hiervoor volgde ik een [guide](https://developer.spotify.com/documentation/web-api/howtos/web-app-profile) van Spotify zelf. Het resultaat was er, maar ik snapte nog niet helemaal hoe dit in zijn werking ging. Dus besloot ik om naar de verschillende concepten voor de authenticatie te kijken, die wederom van Spotify zelf waren. Het resultaat was een prototype voor de authenticatie van Spotify.
 
+<img src='./readme-files/dopify-authenticationPrototype-1.png'>
+<img src='./readme-files/dopify-authenticationPrototype-2.png'>
+
+De authenticatie van gebruikers verloopt via de server-side, die het verzoek naar de authenticatie API van Spotify een verzoek stuurt. In het verzoek wordt de gebruiker doorverwezen naar een inlogpagina van Spotify zelf, waarin de gebruiker akkoord moet geven op punten die vooraf zijn ingesteld. Als de gebruiker eenmaal ingelogd is, zal de authenticatie API van Spotify een POST response sturen om aan de server door te geven dat de gebruiker geauthentiseerd is. In de response staat een *Access Token* en een *Refresh Token*. Met de Refresh Token kan de server verzoeken naar een API van Spotify sturen namens een ingelogde gebruiker door de access token in de header mee te geven in het verzoek. De Access Token is maar één uur geldig en om deze te vernieuwen is de Refresh Token nodig. 
+
+In de tweede afbeelding van de bovenstaande afbeeldingen is informatie te zien over mijn Spotify account. Dit is informatie dat uit een response van een request dat naar Spotify is gestuurd. In de request staat een URL gespecificeerd, vanuit waar de API a.d.h.v. de Access Token informatie terug stuurt dat Spotify publiekelijk beschikbaar stelt, zoals de display name, id, spotify URI, Profile Image en het land waar het account in is gevestigd.
 
 ### Player
+Na de authenticatie enigzins te begrijpen begon ik te rommelen met de *Web Playback SDK*, oftewel, de Spotify Player API. In deze API zijn alle functionaliteiten te vinden die te maken hebben met de player, zoals het starten/pauzeren van liedjes, een vorig/volgend liedje afspelen, volume van de player, de positie in het afspelende liedje, etc. Deze API is, logische wijze, alleen via de client-side te gebruiken. Een server kan immers geen media player weergeven. Om deze reden heb ik de deze API eerst apart, lokaal getest zonder dat ik een server-side gerenderde applicatie aan het uitvoeren was. Hiermee heb ik het volgende prototype tot stand kunnen brengen.
 
+<img src='./readme-files/dopify-playerPrototype-1.png'>
+
+In het prototype heb ik enkele functionaliteiten van de Spotify Player verwerkt, zoals de toggle play, pause, resume, next en previous knoppen, een werkende volume en seek (door het liedje zoeken) slider en enkele gegevens over een liedje dat aan het afspelen is, zoals de album cover, de artiest en de titel van het liedje. De knoppen werken op basis van een aangeleverde functie genaamd *player*, waarmee functies kunnen worden gemaakt die een commando versturen naar de Spotify Player API. Deze functies kunnen a.d.h.v. een onClick button worden aangeroepen. Dit zijn alleen vrij simpele functies, omdat alle code voor een bepaalde functionaliteit al door Spotify is gemaakt en wordt aangeleverd. Alleen de sliders heb ik zelf bedacht. Deze werken op basis van een script dat door *Sanne 't Hoofd* is aangeleverd voor een ander vak, waarbij de sliders een bepaalde value krijgen op een bepaalde positie. Deze value is ligt tussen de 0 en 1, om 0% en 100% aan te duiden. Vervolgens wordt deze value omgezet naar een **CSS root** waarde, wat weer in het JavaScript script wordt gebruikt om de volume en seek waarde te vermenigvuldigen met de value van de slider. Hierdoor krijg je bijvoorbeeld dat de seek waarde bij het aanklikken van een liedje 0 is en bij het selecteren van een positie in de slider de waarde van deze positie wordt vermenigvuldig met de totale duratie van het liedje. Dit resulteert in bijvoorbeeld 150000ms * 0.5, wat het huidige timestamp van het liedje verandert naar het midden van het liedje. Informatie over het liedje wordt opgehaald a.d.h.v. verzoeken naar de Spotify Player API die specifiek gericht zijn op de URL voor informatie over het huidige afspelende liedje.
 
 ## Eindresultaat
 
