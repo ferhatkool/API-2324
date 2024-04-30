@@ -33,9 +33,11 @@ nodemon server.js
 De server zal nu zonder problemen worden uitgevoerd. 
 
 ### Publiekelijk toegankelijk
-Om de server publiekelijk toegankelijk te maken, is het vereist dat er gebruik wordt gemaakt van HTTPS. Zonder HTTPS zal de Spotify API errors geven en niet functioneren, omdat zij willen dat er gebruik wordt gemaakt van HTTPS. Voor localhost maakt het niet uit. Er zijn twee manieren, de simpele manier waarbij gebruik wordt gemaakt van een NPM-module en de ingewikkelde manier, dat ik heb gebruikt om [Dopify](https://dopify-player.nl) te hosten. 
+Om de server publiekelijk toegankelijk te maken, is het vereist dat er gebruik wordt gemaakt van HTTPS. Zonder HTTPS zal de Spotify API errors geven en niet functioneren, omdat zij willen dat er gebruik wordt gemaakt van HTTPS. Voor localhost maakt het niet uit. Er zijn twee manieren, de simpele manier waarbij gebruik wordt gemaakt van een NPM-module en de ingewikkelde manier. De laatste methode heb ik gebruikt om [Dopify](https://dopify-player.nl) te hosten. 
 
-#### NPM-module - localtunnel
+
+<details>
+    <summary>#### NPM-module - localtunnel<summary>
 **localtunnel** is een NPM module dat het HTTP verkeer van localhost doorstuurt naar een server van localtunnel, dat dient als HTTPS proxy. Het is namelijk onmogelijk om met *tinyhttp* gebruik te kunnen maken van SSL certificaten om HTTPS te verkrijgen op de website. Om localtunnel te installeren is het vereist om deze global te installeren, om de tool zo goed mogelijk te laten functioneren.
 
 ```
@@ -49,8 +51,51 @@ lt --port { poortnummer v/d server (standaard 8500) }
 ```
 
 Nu zal *localtunnel* een URL genereren, die de website met HTTPS zal weergeven aan de gebruiker dat de URL bezoekt. Let wel op, de URL is beveiligd met een wachtwoord. Het wachtwoord is het publieke [IP](https://www.whatsmyip.org/) van het systeem waar de webserver op wordt uitgevoerd.
+</details>
 
 #### Apache2 i.c.m. Nginx Proxy Manager
+<details>
+<summary>Klap de tekst open...</summary>
+Apache2 kan voor meerdere doeleindes worden gebruikt, zoals het hosten van een simpele website. Maar dankzij de talloze beschikbare modules kan Apache2 ook worden gebruikt als HTTPS Proxy. Apache2 dient in mijn geval als Proxy voor de NodeJS server dat draait op HTTP. De proxy zorgt ervoor dat de buiten wereld denkt een HTTPS-verbinding te hebben met de webserver en dat is voor het grootste gedeelte ook zo. Het verkeer is alleen geen HTTPS-verkeer als het vanaf de proxy naar de NodeJS webserver gaat, maar als beide services op dezelfde host worden uitgevoerd, zal het geen beveiligings-risico's met zich meebrengen. Om Apache2 te installeren moet het volgende commando worden uitgevoerd:
+
+```
+apt-get install apache2 -y
+```
+
+Apache2 heeft een configuratie file nodig om te kunnen functioneren. Hiervoor stel ik de volgende template beschikbaar (alles tussen {} moet worden ingevuld):
+
+```
+NameVirtualHost *:443
+<VirtualHost *:443>
+  ServerName { domeinnaam }
+  DocumentRoot { path naar bestanden voor de website, niet zo relevant }
+
+  CustomLog <LOG-PATH> combined
+  ErrorLog <ERROR-LOG-PATH>
+
+  # Example SSL configuration
+  SSLEngine on
+  SSLProtocol all -SSLv2
+  SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5
+  SSLCertificateFile "{ path naar HTTPS certificaat }"
+  SSLCertificateKeyFile "{ path naar private key file }"
+  SSLCACertificateFile "{ path naar chain file }"
+
+  ProxyPass / http://0.0.0.0:{ poortnummer }/
+  ProxyPassReverse / http://0.0.0.0:{ poortnummer }/
+</VirtualHost>
+```
+
+Dit configuratie bestand moet worden geplaatst op het pad */etc/apache2/sites-available/{ naam }.conf*. Om Apache2 te laten werken met dit configuratie bestand moeten de modules *ssl*, *proxy* en *proxy_http* worden geïnstalleerd en moet de configuratie file zelf worden geactiveerd. 
+```
+a2ensite { path naar configuratie file }
+a2enmod ssl
+a2enmod proxy
+a2enmod proxy_http
+```
+
+Nu moeten er nog enkele functies in Nginx Proxy Manager worden ingesteld.
+</details>
 
  
 ## Gebruikte API's
