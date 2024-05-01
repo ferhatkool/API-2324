@@ -19,6 +19,13 @@
   - [Authenticatie](#authenticatie)
   - [Player](#player)
 - [Eindresultaat](#eindresultaat)
+  - [Startpagina](#startpagina)
+  - [Player](#player-1)
+  - [Tracks](#tracks)
+  - [Playlists](#playlists)
+  - [Queue](#queue)
+  - [Recently Played](#recently-played)
+  - [Notifications](#notifications)
 - [Reflectie](#reflectie)
 - [Logs](#logs)
 
@@ -384,7 +391,7 @@ Door de juiste styling toe te passen wordt elk liedje netejs onder elkaar gezet 
 
 {Nog iets vertellen over het constant verversen van de recently played en de code hiervoor}
 
-### Notificaties
+### Notifications
 De notificaties die de site genereerd heb ik zelf gemaakt a.d.h.v. de Web API *Notifications*. Kort gezegd, elke keer dat een nieuw liedje wordt afgespeeld, wordt er data van het liedje opgehaald. De data wordt vervolgens gebruikt om informatie in de notificatie te zetten, zoals de titel van het liedje, het bijbehorende artiest, de cover art van het liedje en een afbeelding van de artiest. Notificaties worden op de client-side gegenereerd. De notificaties worden gegenereerd a.d.h.v. de volgende code:
 
 ```jsx
