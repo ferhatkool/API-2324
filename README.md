@@ -163,10 +163,12 @@ Toen ik dit eenmaal doorhad, begon ik de werking van de Spotify API beter te beg
 ### Web API: Notification
 Als extra web API heb ik gebruik gemaakt van Notifications. Ik heb dit gebruikt om een browser notificatie te tonen wanneer er een nieuw nummer wordt afgespeeld. Hierdoor hoeft een gebruiker van Dopify niet de player constant open te hebben om te zien wat er afspeelt, gezien er vanuit het OS een notificatie wordt getoond. Zelf heb ik geconstateerd dat de notificaties op MacOS te kaal zijn om te kunnen gebruiken, maar op Windows wordt er in een Chromium browser netjes de notificatie getoond.
 
-## Schetsen / Prototypes
+## Schetsen & Prototypes
 Voor deze opdracht heb ik 4 schetsen gemaakt, waarvan er drie zijn uitgewerkt in het uiteindelijke product. Naast de schetsen heb ik twee verschillende 'prototypes'; één prototype voor de authenticatie via de Spotify Authenticatie API en één voor de Spotify Web Playback SDK API. De functionaliteiten van deze twee prototypes zijn uitgewerkt in het uiteindelijke product.
 
 ### Schetsen
+De schetsen heb ik redelijk snel uitgewerkt, omdat ik al vrij snel een idee had voor het design van de site. 
+
 #### Homepage
 Voor de hoofdpagina heb ik twee schetsen; één met de uitgeklapte wachtrij en één zonder. 
 
@@ -201,6 +203,117 @@ Na de authenticatie enigzins te begrijpen begon ik te rommelen met de *Web Playb
 In het prototype heb ik enkele functionaliteiten van de Spotify Player verwerkt, zoals de toggle play, pause, resume, next en previous knoppen, een werkende volume en seek (door het liedje zoeken) slider en enkele gegevens over een liedje dat aan het afspelen is, zoals de album cover, de artiest en de titel van het liedje. De knoppen werken op basis van een aangeleverde functie genaamd *player*, waarmee functies kunnen worden gemaakt die een commando versturen naar de Spotify Player API. Deze functies kunnen a.d.h.v. een onClick button worden aangeroepen. Dit zijn alleen vrij simpele functies, omdat alle code voor een bepaalde functionaliteit al door Spotify is gemaakt en wordt aangeleverd. Alleen de sliders heb ik zelf bedacht. Deze werken op basis van een script dat door *Sanne 't Hoofd* is aangeleverd voor een ander vak, waarbij de sliders een bepaalde value krijgen op een bepaalde positie. Deze value is ligt tussen de 0 en 1, om 0% en 100% aan te duiden. Vervolgens wordt deze value omgezet naar een **CSS root** waarde, wat weer in het JavaScript script wordt gebruikt om de volume en seek waarde te vermenigvuldigen met de value van de slider. Hierdoor krijg je bijvoorbeeld dat de seek waarde bij het aanklikken van een liedje 0 is en bij het selecteren van een positie in de slider de waarde van deze positie wordt vermenigvuldig met de totale duratie van het liedje. Dit resulteert in bijvoorbeeld 150000ms * 0.5, wat het huidige timestamp van het liedje verandert naar het midden van het liedje. Informatie over het liedje wordt opgehaald a.d.h.v. verzoeken naar de Spotify Player API die specifiek gericht zijn op de URL voor informatie over het huidige afspelende liedje.
 
 ## Eindresultaat
+Het eindresultaat is een media player dat gebruik maakt van de data dat Spotify beschikbaar stelt. De media player in kwetstie heeft de benaming **Dopify** gekregen, omdat het Spotify is, maar dan ***DOPE***. De media player kent verschillende onderdelen; *de startpagina*, *tracks*, *playlists*, *queue*, *recently played*, *notificaties* en de *player* zelf.
+
+### Startpagina
+De startpagina dient eerder als welkomspagina, waarbij weinig context wordt aangeboden, behalve een login knop. Deze login knop verwijst naar de pagina */login*, wat als redirect dient naar een authenticatiepagina van Spotify zelf. 
+
+<img src='./readme-files/dopify-startpage.png'>
+
+Op deze pagina moet een gebruiker inloggen en toestemming geven aan Dopify om bepaalde rechten te verkrijgen.
+
+<img src='./readme-files/dopify-accessManagement.png'>
+
+Als de gebruiker ingelogd is, krijgt deze gelijk de hoofdpagina te zien. De site bestaat eigenlijk alleen uit de hoofdpagina, dat als de media player dient. Hierop zijn een aantal liedjes en playlists te vinden, de queue, recently played tracks en de player zelf.
+
+<img src='./readme-files/dopify-homepage.png'>
+
+### Tracks
+De liedjes die worden weergegeven zijn vooraf geselecteerd. De selectie kan ten alle tijden worden aangepast, omdat de selectie in een *array* staat genoteerd. Van elk liedje staat het bijbehorende ID in de array als waarde en wanneer de hoofdpagina wordt ingeladen, wordt er voor elk liedje een GET request verstuurd naar de Web API van Spotify om de data van het bijbehorende ID op te vragen. Als de data eenmaal binnen is, zal a.d.h.v. LiquidJS voor elk liedje een loop worden uitgevoerd dat de HTML elementen aanmaakt. Hiervoor wordt het volgende stuk code gebruikt:
+
+```jsx
+<h2>Top Picks</h2>
+<div class="all-tracks">
+  {% for track in tracks %}
+    <section class="track-group">
+      <b>{{ track.artists[0].name }}</b>
+      <p>{{ track.name }}</p>
+      <div>
+        <svg onclick="playThisTrack('{{ track.album.id }}', 0)" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 107 107">
+          <g id="PlayWithBackground" transform="translate(-556 -630)">
+            <circle fill="#1DB954" id="BackgroundPlay" cx="53.5" cy="53.5" r="53.5" transform="translate(556 630)"/>
+            <path id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(636 650) rotate(90)" fill="#000"/>
+          </g>
+        </svg>
+        <img src= {{ track.album.images[0].url }}>
+      </div>              
+    </section>
+  {% endfor %}
+</div>  
+```
+
+Door de juiste styling toe te passen worden de tracks netjes naast elkaar geplaatst en kan er door het div-element worden gescrolled. Het resultaat ziet er als volgt uit:
+
+<img src='./readme-files/dopify-tracks.png'>
+
+Door met de muis op de banner van een liedje te staan, zal de afbeelding een klein beetje worden ingezoomed en verschijnt er een groene play knop. Door op deze knop te drukken zal het verzoek naar de Spotify Web Playback API worden gestuurd om het liedje met het bijbehorende ID af te spelen. Let wel op, het liedje wordt uit het bijbehorende ***album*** afgespeeld, wat ervoor zorgt dat het album in de queue wordt gezet. Het bijbehorende album kan ook een EP of single zijn. Bij een single worden soortgelijke liedjes door Spotify in de queue gezet. 
+
+### Playlists
+De playlists die worden weergegeven zijn, net als de liedjes, vooraf geselecteerd en worden op dezelfde manier opgehaald van de Web API van Spotify. Ook wordt er op dezelfde manier een loop uitgevoerd om de HTML elementen aan te maken. Het resultaat ziet er als volgt uit.
+
+<img src='./readme-files/dopify-playlists.png'>
+
+Het voornaamste verschil tussen de tracks en playlists is dat bij het aanklikken van een playlist, de gehele playlist in de queue wordt gezet. De playlist begint met afspelen bij het eerste liedje.
+
+### Queue
+De queue wordt opgehaald door een GET request te sturen naar de bijbehorende API van Spotify. Als response wordt, logische wijs, de gehele queue terug gestuurd. De queue is opgedeeld in twee delen;Indien de queue leeg is, zal een lege array worden teruggestuurd. De response is in twee delen opgedeeld; *Now Playing* en *Next Up*. Wederom wordt de data na het ophalen gelooped, om de juiste HTML elementen te genereren. Het stuk code ziet er als volgt uit:
+
+```jsx
+<div id="queueContent" class="queueRecentlyPlayedContent">
+  <h3>Now Playing</h3>
+  {% if queue.currently_playing != null%}
+    <section class="queueTrack queue-group">
+      <div>
+        <svg onclick="playThisTrack('{{ queue.currently_playing.album.id }}', 0)" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 107 107">
+          <g id="PlayWithBackground" transform="translate(-556 -630)">
+            <circle fill="#1DB954" id="BackgroundPlay" cx="53.5" cy="53.5" r="53.5" transform="translate(556 630)"/>
+            <path id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(636 650) rotate(90)" fill="#000"/>
+          </g>
+        </svg>
+        <img class="queuePictures" src={{ queue.currently_playing.album.images[1].url }}>
+      </div>
+      <b>{{queue.currently_playing.artists[0].name}}</b>
+      <p>{{ queue.currently_playing.name }}</p>
+    </section>
+  {% elsif queue.currently_playing == null %}
+    <p>Nothing is currently playing.</p>
+  {% endif %}
+  <h3>Next up</h3>
+  {% if queue.queue.length != 0 %}
+    {% for track in queue.queue %}
+        <section class="queueTracks queue-group">
+        <div>
+          <svg onclick="playThisTrack('{{ track.album.id }}', 0)" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 107 107">
+            <g id="PlayWithBackground" transform="translate(-556 -630)">
+              <circle fill="#1DB954" id="BackgroundPlay" cx="53.5" cy="53.5" r="53.5" transform="translate(556 630)"/>
+              <path id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(636 650) rotate(90)" fill="#000"/>
+            </g>
+          </svg>
+          <img class="queuePictures" src={{ track.album.images[1].url }}>
+          </div>
+        <b>{{ track.artists[0].name }}</b>
+        <p>{{ track.name }}</p>
+      </section>
+    {% endfor %}
+  {% else %}
+    <p>The queue is empty.</p>
+  {% endif %}
+</div>
+```
+
+Door de juiste styling toe te passen wordt elk liedje netjes onder elkaar gezet en is het mogelijk om door het div-element te scrollen. Het resultaat ziet er als volgt uit:
+
+<img src='./readme-files/dopify-queue.png'>
+
+### Recently Played
+
+
+<img src='./readme-files/dopify-recentlyPlayed.png'>
+
+### Notificaties
+
+
+### Player
 
 
 ## Reflectie
