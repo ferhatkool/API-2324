@@ -32,6 +32,8 @@ De doelen van dit vak zijn gericht op 'het in staat zijn om een server-side gere
 Het was ook de bedoeling dat we ons bezig gingen houden met Enhancements voor het app-concept door bijvoorbeeld gebruik te maken van extra *Web API's*. Hiervoor heb ik gekozen om de Web API [**Notification**](https://developer.mozilla.org/en-US/docs/Web/API/Notification) te gebruiken, waarmee ik een notificatie genereer wanneer er een nieuw liedje wordt afgespeeld. Maar ook het visueel aantrekkelijk maken van de site was belangrijk. In mijn geval heb ik het design van Spotify een beetje nagemaakt, zodat het net lijkt alsof er gebruik wordt gemaakt van Spotify.
 
 ## Installatie
+Om Dopify te gebruiken zijn er twee manieren waarop de server gehost kan worden; alleen op localhost of publiekelijk toegankelijk. Voor de localhost versie zal Dopify alleen toegankelijk zijn op een browser van de host zelf. Als Dopify publiekelijk toegankelijk is kan logische wijs iedereen bij de site komen. Het publiekelijk toegankelijk maken van de site kan op twee manieren; via het internet d.m.v. een NPM module genaamd Localtunnel of, zoals ik het heb gedaan, a.d.h.v. Apache2 en Nginx Proxy Manager, maar dit kan natuurlijk op ieders eigen manier. Standaard is het alleen mogelijk om met je eigen account gebruik te maken van de Spotify App, maar er kunnen wel 'leden' worden toegevoegd aan de app met een maximum van 25 leden. Om een lid toe te voegen moet je op het dashboard van de app onder *users* de naam van het lid en het e-mailadres van het lid invoeren. 
+
 ### Localhost
 De repository is vrijwel 'ready to use'. De enige vereiste software-componenten voor de installatie van Dopify zijn NodeJS en NPM. Optioneel is Nodemon dat globaal geïnstalleerd is, maar dat wordt meer gebruikt voor testdoeleindes. Eerst moet natuurlijk de repository geclonned worden. Het enige dat mist aan de repository is een access token en een secret token, die app gebonden zijn. Lees de informatie door van de volgende [link](https://developer.spotify.com/documentation/web-api/tutorials/code-flow) voor meer informatie. Deze dienen in een file gezet te worden genaamd *token.env*, dat natuurlijk niet is meegegeven aan de repository. De structuur van de file ziet er als volgt uit:
 
@@ -62,6 +64,8 @@ De server zal nu zonder problemen worden uitgevoerd.
 
 ### Publiekelijk toegankelijk
 Om de server publiekelijk toegankelijk te maken, is het vereist dat er gebruik wordt gemaakt van HTTPS. Zonder HTTPS zal de Spotify API errors geven en niet functioneren, omdat zij willen dat er gebruik wordt gemaakt van HTTPS. Voor localhost maakt het niet uit. Er zijn twee manieren, de simpele manier waarbij gebruik wordt gemaakt van een NPM-module en de ingewikkelde manier. De laatste methode heb ik gebruikt om [Dopify](https://dopify-player.nl) te hosten. 
+
+*Note: Voor het publiekelijk toegankelijk maken van de site volgens de volgende twee methodes moeten de stappen voor het uitvoeren van de server op localhost worden doorlopen.*
 
 #### NPM-module - localtunnel
 <details>
