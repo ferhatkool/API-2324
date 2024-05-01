@@ -220,9 +220,25 @@ Als de gebruiker ingelogd is, krijgt deze gelijk de hoofdpagina te zien. De site
 
 
 ### Player
-{nog invullen}
+De Web Playback SDK is het fundamentele gedeelte van de site. Deze API maakt het mogelijk dat de site als 'afspeelapparaat' wordt gezien door Spotify en dit is ook op alle afspeelapparaten te zien, zoals in het voorbeeld hieronder.
 
-In de Web Playback SDK API zit een functie dat luistert naar wijzigingen in de player, zoals een nieuw liedje dat wordt afgespeeld. Ik heb deze functionaliteit gebruikt om het één en ander opnieuw uit te voeren wanneer er een nieuw liedje wordt afgespeeld:
+<img src='./readme-files/dopify-devices.png'>
+
+De functionaliteiten van deze API zorgen ervoor dat de site gebruikt kan worden om liedjes te starten/pauzeren, een vorig/volgend liedje af te spelen, shuffle aan/uit te zetten, repeat aan/uit te zetten, het volume te regelen, de afspeelpositie van een liedje te veranderen en het afspeelapparaat te wijzigen naar de site. Alle genoemde functionaliteiten zijn in een JavaScript script te gebruiken via de functie *player*. Deze functie stuurt als het ware commando's naar de Playback API die voor alle afspeelapparaten gelden. Spotify is immers een streamingsdienst en zij hebben het zo geregeld dat het mogelijk is om op alle afspeelapparaten audio te bedienen. A.d.h.v. buttons is het mogelijk om functies aan te sturen die gebruik maken van de *player* functie, waardoor als het ware een media player kan worden gevisualiseerd, zoals hieronder te zien is.
+
+<img src='./readme-files/dopify-player.png'>
+
+Op het plaatje zijn de volgende functionaliteiten te zien:
+- Informatie over het liedje dat nu wordt afgespeeld, zoals de titel, artiest van het liedje en de cover art.
+- Knoppen die de *player* functie aansturen, waarvan sommigen ook meeveranderen met de staat van de functie, zoals shuffle, starten/pauzeren en repeat.
+- Seek slider dat meebeweegt op basis van de afspeelpositie van het liedje.
+- Huidige timestamp van het liedje, waarbij elke seconde één seconde bij wordt opgeteld, met een maximum van de totale duratie van het liedje.
+- Totale duratie van het liedje
+- Knop om het afspeelapparaat voor de stream te wisselen naar de site.
+- Knop om de queue te tonen, wat niet onder de Web Playback SDK API valt, maar ik wel tussen de media controls heb geplaatst.
+- Een volume knop dat een slider weergeeft wanneer er de muis op de knop staat. De slider regelt het volume van de stream.
+
+Ook zit er in deze API een functie *(player.addListener('player_state_changed', {naam van een functie});)* dat luistert naar wijzigingen in de player, zoals een nieuw liedje dat wordt afgespeeld. Ik heb deze functionaliteit gebruikt om het één en ander opnieuw uit te voeren wanneer er een nieuw liedje wordt afgespeeld:
 - De queue wordt opnieuw opgehaald en de data hiervan wordt opnieuw in de gegenereerde HTML-elementen ingeladen.
 - De recent afgespeelde liedjes worden opnieuw opgehaald en de data hiervan wordt opnieuw in de gegenereerde HTML-elementen ingeladen.
 - Het genereren van een notificatie

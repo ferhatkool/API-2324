@@ -43,9 +43,7 @@
         </div>
 
         <h2>Playlists</h2>
-
-        <div class="all-playlists">
-            
+        <div class="all-playlists"> 
             {% for playlist in playlists %}
                 <section class="playlist-group">
                     <p>{{ playlist.name }}</p>
@@ -57,8 +55,7 @@
                             </g>
                         </svg>
                         <img src = {{ playlist.images[0].url }}>
-                    </div>
-                    
+                    </div> 
                 </section>
             {% endfor %}
         </div>
