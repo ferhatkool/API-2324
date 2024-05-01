@@ -148,12 +148,7 @@
             <label id="volumeSliderLabel">
                 <input id="volumeSlider" type="range" min="0" max="1" step=".001" value=".5" name="volume" class="slider" orient="horizontal">	
             </label>
-
-            
-            
-     
         </div>
-
 
         <div id="queue" class="queueClosed">
             <label>
@@ -215,7 +210,6 @@
                 {% else %}
                     <p>The queue is empty.</p>
                 {% endif %}
-            
             </div>
 
             <div id="recentlyPlayedContent" class="queueRecentlyPlayedContent">
@@ -235,10 +229,7 @@
                     </section>
                 {% endfor %}
             </div>
-        </div>
-
-        {% comment %} <button id="sendNotification">Push Notification</button> {% endcomment %}
-        
+        </div>     
         <script src="https://sdk.scdn.co/spotify-player.js"></script>
         <script src="./slider.js"></script>
         <script src="./script.js"></script>

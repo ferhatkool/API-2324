@@ -23,7 +23,7 @@
 - [Logs](#logs)
 
 ## De opdracht
-De opdracht voor het vak API ging over het leren gebruik maken van externe API's en het hosten van een back-end server a.d.h.v. NodeJS. Als API heb ik de API van Spotify gekozen, omdat ik hier graag meer over wilde leren en omdat ik graag een media player wilde maken dat daadwerkelijk functioneert als media player. 
+De opdracht voor het vak API ging over het leren gebruik maken van externe API's en het hosten van een back-end server a.d.h.v. NodeJS. Als API heb ik de API van Spotify gekozen, omdat ik hier graag meer over wilde leren en omdat ik graag een media player wilde maken dat daadwerkelijk functioneert als media player.
 
 De opdracht voor het vak API luidt als volgt; *"In dit vak zullen we een van de meest voorkomende app-concepten van vandaag gebruiken en ontdekken dat we deze kunnen maken met moderne webtechnologie."*. Het app-concept dat ik heb gekozen is Spotify, wat als streamingsdienst wordt beschouwd. Dit app-concept bestaat uit meerdere API's, waarvan ik de *Web API* en *Web Playback SDK* heb gebruikt. Deze twee zijn als enige relevant voor een media player op het web. De API's van dit app-concept is naar mijn mening uiteindelijk vrij gemakkelijk te gebruiken, alleen is de opstap naar het begrijpen van de API's erg lastig. Gelukkig biedt Spotify een uitgebreide documentatie over de [Web API](https://developer.spotify.com/documentation/web-api) en de [Web Playback SDK](https://developer.spotify.com/documentation/web-playback-sdk).
 
@@ -32,7 +32,7 @@ De doelen van dit vak zijn gericht op 'het in staat zijn om een server-side gere
 Het was ook de bedoeling dat we ons bezig gingen houden met Enhancements voor het app-concept door bijvoorbeeld gebruik te maken van extra *Web API's*. Hiervoor heb ik gekozen om de Web API [**Notification**](https://developer.mozilla.org/en-US/docs/Web/API/Notification) te gebruiken, waarmee ik een notificatie genereer wanneer er een nieuw liedje wordt afgespeeld. Maar ook het visueel aantrekkelijk maken van de site was belangrijk. In mijn geval heb ik het design van Spotify een beetje nagemaakt, zodat het net lijkt alsof er gebruik wordt gemaakt van Spotify.
 
 ## Installatie
-Om Dopify te gebruiken zijn er twee manieren waarop de server gehost kan worden; alleen op localhost of publiekelijk toegankelijk. Voor de localhost versie zal Dopify alleen toegankelijk zijn op een browser van de host zelf. Als Dopify publiekelijk toegankelijk is kan logische wijs iedereen bij de site komen. Het publiekelijk toegankelijk maken van de site kan op twee manieren; via het internet d.m.v. een NPM module genaamd Localtunnel of, zoals ik het heb gedaan, a.d.h.v. Apache2 en Nginx Proxy Manager, maar dit kan natuurlijk op ieders eigen manier. Standaard is het alleen mogelijk om met je eigen account gebruik te maken van de Spotify App, maar er kunnen wel 'leden' worden toegevoegd aan de app met een maximum van 25 leden. Om een lid toe te voegen moet je op het dashboard van de app onder *users* de naam van het lid en het e-mailadres van het lid invoeren. 
+Om Dopify te gebruiken zijn er twee manieren waarop de server gehost kan worden; alleen op localhost of publiekelijk toegankelijk. Voor de localhost versie zal Dopify alleen toegankelijk zijn op een browser van de host zelf. Als Dopify publiekelijk toegankelijk is kan logische wijs iedereen bij de site komen. Het publiekelijk toegankelijk maken van de site kan op twee manieren; via het internet d.m.v. een NPM module genaamd Localtunnel of, zoals ik het heb gedaan, a.d.h.v. Apache2 en Nginx Proxy Manager, maar dit kan natuurlijk op ieders eigen manier. Standaard is het alleen mogelijk om met je eigen account gebruik te maken van de Spotify App, maar er kunnen wel 'leden' worden toegevoegd aan de app met een maximum van 25 leden. Om een lid toe te voegen moet je op het dashboard van de app onder *users* de naam van het lid en het e-mailadres van het lid invoeren.
 
 ### Localhost
 De repository is vrijwel 'ready to use'. De enige vereiste software-componenten voor de installatie van Dopify zijn NodeJS en NPM. Optioneel is Nodemon dat globaal geïnstalleerd is, maar dat wordt meer gebruikt voor testdoeleindes. Eerst moet natuurlijk de repository geclonned worden. Het enige dat mist aan de repository is een access token en een secret token, die app gebonden zijn. Lees de informatie door van de volgende [link](https://developer.spotify.com/documentation/web-api/tutorials/code-flow) voor meer informatie. Deze dienen in een file gezet te worden genaamd *token.env*, dat natuurlijk niet is meegegeven aan de repository. De structuur van de file ziet er als volgt uit:
@@ -60,10 +60,10 @@ node server.js
 nodemon server.js
 ```
 
-De server zal nu zonder problemen worden uitgevoerd. 
+De server zal nu zonder problemen worden uitgevoerd.
 
 ### Publiekelijk toegankelijk
-Om de server publiekelijk toegankelijk te maken, is het vereist dat er gebruik wordt gemaakt van HTTPS. Zonder HTTPS zal de Spotify API errors geven en niet functioneren, omdat zij willen dat er gebruik wordt gemaakt van HTTPS. Voor localhost maakt het niet uit. Er zijn twee manieren, de simpele manier waarbij gebruik wordt gemaakt van een NPM-module en de ingewikkelde manier. De laatste methode heb ik gebruikt om [Dopify](https://dopify-player.nl) te hosten. 
+Om de server publiekelijk toegankelijk te maken, is het vereist dat er gebruik wordt gemaakt van HTTPS. Zonder HTTPS zal de Spotify API errors geven en niet functioneren, omdat zij willen dat er gebruik wordt gemaakt van HTTPS. Voor localhost maakt het niet uit. Er zijn twee manieren, de simpele manier waarbij gebruik wordt gemaakt van een NPM-module en de ingewikkelde manier. De laatste methode heb ik gebruikt om [Dopify](https://dopify-player.nl) te hosten.
 
 *Note: Voor het publiekelijk toegankelijk maken van de site volgens de volgende twee methodes moeten de stappen voor het uitvoeren van de server op localhost worden doorlopen.*
 
@@ -123,7 +123,7 @@ NameVirtualHost *:443
 
 </details>
 
-Dit configuratie bestand moet worden geplaatst op het pad */etc/apache2/sites-available/{ naam }.conf*. Om Apache2 te laten werken met dit configuratie bestand moeten de modules *ssl*, *proxy* en *proxy_http* worden geïnstalleerd en moet de configuratie file zelf worden geactiveerd. 
+Dit configuratie bestand moet worden geplaatst op het pad */etc/apache2/sites-available/{ naam }.conf*. Om Apache2 te laten werken met dit configuratie bestand moeten de modules *ssl*, *proxy* en *proxy_http* worden geïnstalleerd en moet de configuratie file zelf worden geactiveerd.
 ```
 a2ensite { path naar configuratie file }
 a2enmod ssl
@@ -151,12 +151,12 @@ systemctl restart apache2
 ```
 </details>
 
- 
+
 ## Gebruikte API's
-De API dat ik heb gebruikt voor de opdracht is de API van Spotify. Spotify stelt vrijwel hun hele assortiment van API's beschikbaar voor Premium gebruikers om te gebruiken als Developer. Hiervoor heb ik in de Developer Panel een app aangemaakt, die ik de naam Dopify heb gegeven. Op het moment kon ik geen andere naam bedenken en ik heb de naam van mijn tool simpelweg zo gelaten. 
+De API dat ik heb gebruikt voor de opdracht is de API van Spotify. Spotify stelt vrijwel hun hele assortiment van API's beschikbaar voor Premium gebruikers om te gebruiken als Developer. Hiervoor heb ik in de Developer Panel een app aangemaakt, die ik de naam Dopify heb gegeven. Op het moment kon ik geen andere naam bedenken en ik heb de naam van mijn tool simpelweg zo gelaten.
 
 ### Spotify API
-Ik ben begonnen met het uitproberen van verschillende functionaliteiten van de Spotify API, waarbij ik vooraf kort onderzoek heb gedaan over wat er überhaupt mogelijk is met de API. Al snel kwam ik erachter dat mijn denkwijze over hoe Spotify werkt niet klopte. Ik had namelijk het idee dat Spotify als media player functioneerde en telkens het nummer dat werd afgespeeld vooraf ophaalde en dat de media controls, zoals de knoppen om te pauzeren, het liedje te skippen, etc., in de applicatie werden uitgevoerd. Maar eigenlijk werkt alles in Spotify, zowel de web versie als alle applicaties die op apparaten kan worden gedownload, a.d.h.v. API calls naar de servers van Spotify, vanuit waar de muziek wordt gestreamed naar het afspeelapparaat. 
+Ik ben begonnen met het uitproberen van verschillende functionaliteiten van de Spotify API, waarbij ik vooraf kort onderzoek heb gedaan over wat er überhaupt mogelijk is met de API. Al snel kwam ik erachter dat mijn denkwijze over hoe Spotify werkt niet klopte. Ik had namelijk het idee dat Spotify als media player functioneerde en telkens het nummer dat werd afgespeeld vooraf ophaalde en dat de media controls, zoals de knoppen om te pauzeren, het liedje te skippen, etc., in de applicatie werden uitgevoerd. Maar eigenlijk werkt alles in Spotify, zowel de web versie als alle applicaties die op apparaten kan worden gedownload, a.d.h.v. API calls naar de servers van Spotify, vanuit waar de muziek wordt gestreamed naar het afspeelapparaat.
 
 Toen ik dit eenmaal doorhad, begon ik de werking van de Spotify API beter te begrijpen en vond ik het makkelijker om er gebruik van te maken.
 
@@ -167,10 +167,10 @@ Als extra web API heb ik gebruik gemaakt van Notifications. Ik heb dit gebruikt 
 Voor deze opdracht heb ik 4 schetsen gemaakt, waarvan er drie zijn uitgewerkt in het uiteindelijke product. Naast de schetsen heb ik twee verschillende 'prototypes'; één prototype voor de authenticatie via de Spotify Authenticatie API en één voor de Spotify Web Playback SDK API. De functionaliteiten van deze twee prototypes zijn uitgewerkt in het uiteindelijke product.
 
 ### Schetsen
-De schetsen heb ik redelijk snel uitgewerkt, omdat ik al vrij snel een idee had voor het design van de site. 
+De schetsen heb ik redelijk snel uitgewerkt, omdat ik al vrij snel een idee had voor het design van de site.
 
 #### Homepage
-Voor de hoofdpagina heb ik twee schetsen; één met de uitgeklapte wachtrij en één zonder. 
+Voor de hoofdpagina heb ik twee schetsen; één met de uitgeklapte wachtrij en één zonder.
 
 <img src='./readme-files/dopify-homepage-schets-1.jpg'>
 <img src='./readme-files/dopify-homepage-schets-2.jpg'>
@@ -191,7 +191,7 @@ Ik begon te experimenteren van de functionaliteiten voor de Spotify authenticati
 <img src='./readme-files/dopify-authenticationPrototype-1.png'>
 <img src='./readme-files/dopify-authenticationPrototype-2.png'>
 
-De authenticatie van gebruikers verloopt via de server-side, die het verzoek naar de authenticatie API van Spotify een verzoek stuurt. In het verzoek wordt de gebruiker doorverwezen naar een inlogpagina van Spotify zelf, waarin de gebruiker akkoord moet geven op punten die vooraf zijn ingesteld. Als de gebruiker eenmaal ingelogd is, zal de authenticatie API van Spotify een POST response sturen om aan de server door te geven dat de gebruiker geauthentiseerd is. In de response staat een *Access Token* en een *Refresh Token*. Met de Refresh Token kan de server verzoeken naar een API van Spotify sturen namens een ingelogde gebruiker door de access token in de header mee te geven in het verzoek. De Access Token is maar één uur geldig en om deze te vernieuwen is de Refresh Token nodig. 
+De authenticatie van gebruikers verloopt via de server-side, die het verzoek naar de authenticatie API van Spotify een verzoek stuurt. In het verzoek wordt de gebruiker doorverwezen naar een inlogpagina van Spotify zelf, waarin de gebruiker akkoord moet geven op punten die vooraf zijn ingesteld. Als de gebruiker eenmaal ingelogd is, zal de authenticatie API van Spotify een POST response sturen om aan de server door te geven dat de gebruiker geauthentiseerd is. In de response staat een *Access Token* en een *Refresh Token*. Met de Refresh Token kan de server verzoeken naar een API van Spotify sturen namens een ingelogde gebruiker door de access token in de header mee te geven in het verzoek. De Access Token is maar één uur geldig en om deze te vernieuwen is de Refresh Token nodig.
 
 In de tweede afbeelding van de bovenstaande afbeeldingen is informatie te zien over mijn Spotify account. Dit is informatie dat uit een response van een request dat naar Spotify is gestuurd. In de request staat een URL gespecificeerd, vanuit waar de API a.d.h.v. de Access Token informatie terug stuurt dat Spotify publiekelijk beschikbaar stelt, zoals de display name, id, spotify URI, Profile Image en het land waar het account in is gevestigd.
 
@@ -206,7 +206,7 @@ In het prototype heb ik enkele functionaliteiten van de Spotify Player verwerkt,
 Het eindresultaat is een media player dat gebruik maakt van de data dat Spotify beschikbaar stelt. De media player in kwetstie heeft de benaming **Dopify** gekregen, omdat het Spotify is, maar dan ***DOPE***. De media player kent verschillende onderdelen; *de startpagina*, *tracks*, *playlists*, *queue*, *recently played*, *notificaties* en de *player* zelf.
 
 ### Startpagina
-De startpagina dient eerder als welkomspagina, waarbij weinig context wordt aangeboden, behalve een login knop. Deze login knop verwijst naar de pagina */login*, wat als redirect dient naar een authenticatiepagina van Spotify zelf. 
+De startpagina dient eerder als welkomspagina, waarbij weinig context wordt aangeboden, behalve een login knop. Deze login knop verwijst naar de pagina */login*, wat als redirect dient naar een authenticatiepagina van Spotify zelf.
 
 <img src='./readme-files/dopify-startpage.png'>
 
@@ -218,8 +218,17 @@ Als de gebruiker ingelogd is, krijgt deze gelijk de hoofdpagina te zien. De site
 
 <img src='./readme-files/dopify-homepage.png'>
 
+
+### Player
+{nog invullen}
+
+In de Web Playback SDK API zit een functie dat luistert naar wijzigingen in de player, zoals een nieuw liedje dat wordt afgespeeld. Ik heb deze functionaliteit gebruikt om het één en ander opnieuw uit te voeren wanneer er een nieuw liedje wordt afgespeeld:
+- De queue wordt opnieuw opgehaald en de data hiervan wordt opnieuw in de gegenereerde HTML-elementen ingeladen.
+- De recent afgespeelde liedjes worden opnieuw opgehaald en de data hiervan wordt opnieuw in de gegenereerde HTML-elementen ingeladen.
+- Het genereren van een notificatie
+
 ### Tracks
-De liedjes die worden weergegeven zijn vooraf geselecteerd. De selectie kan ten alle tijden worden aangepast, omdat de selectie in een *array* staat genoteerd. Van elk liedje staat het bijbehorende ID in de array als waarde en wanneer de hoofdpagina wordt ingeladen, wordt er voor elk liedje een GET request verstuurd naar de Web API van Spotify om de data van het bijbehorende ID op te vragen. Als de data eenmaal binnen is, zal a.d.h.v. LiquidJS voor elk liedje een loop worden uitgevoerd dat de HTML elementen aanmaakt. Hiervoor wordt het volgende stuk code gebruikt:
+De liedjes die worden weergegeven zijn vooraf geselecteerd. De selectie kan ten alle tijden worden aangepast, omdat de selectie in een *array* staat genoteerd. Van elk liedje staat het bijbehorende ID in de array als waarde en wanneer de hoofdpagina wordt ingeladen, wordt er voor elk liedje een GET request verstuurd naar de Web API van Spotify (https://api.spotify.com/v1/tracks/' + trackId + '?market=NL) om de data van het bijbehorende ID op te vragen. Als de data eenmaal binnen is, zal a.d.h.v. LiquidJS voor elk liedje een loop worden uitgevoerd dat de HTML elementen aanmaakt. Hiervoor wordt het volgende stuk code gebruikt:
 
 ```jsx
 <h2>Top Picks</h2>
@@ -236,27 +245,49 @@ De liedjes die worden weergegeven zijn vooraf geselecteerd. De selectie kan ten 
           </g>
         </svg>
         <img src= {{ track.album.images[0].url }}>
-      </div>              
+      </div>
     </section>
   {% endfor %}
-</div>  
+</div>
 ```
 
 Door de juiste styling toe te passen worden de tracks netjes naast elkaar geplaatst en kan er door het div-element worden gescrolled. Het resultaat ziet er als volgt uit:
 
 <img src='./readme-files/dopify-tracks.png'>
 
-Door met de muis op de banner van een liedje te staan, zal de afbeelding een klein beetje worden ingezoomed en verschijnt er een groene play knop. Door op deze knop te drukken zal het verzoek naar de Spotify Web Playback API worden gestuurd om het liedje met het bijbehorende ID af te spelen. Let wel op, het liedje wordt uit het bijbehorende ***album*** afgespeeld, wat ervoor zorgt dat het album in de queue wordt gezet. Het bijbehorende album kan ook een EP of single zijn. Bij een single worden soortgelijke liedjes door Spotify in de queue gezet. 
+Door met de muis op de banner van een liedje te staan, zal de afbeelding een klein beetje worden ingezoomed en verschijnt er een groene play knop. Door op deze knop te drukken zal het verzoek naar de Spotify Web Playback API worden gestuurd om het liedje met het bijbehorende ID af te spelen. Let wel op, het liedje wordt uit het bijbehorende ***album*** afgespeeld, wat ervoor zorgt dat het album in de queue wordt gezet. Het bijbehorende album kan ook een EP of single zijn. Bij een single worden soortgelijke liedjes door Spotify in de queue gezet.
 
 ### Playlists
-De playlists die worden weergegeven zijn, net als de liedjes, vooraf geselecteerd en worden op dezelfde manier opgehaald van de Web API van Spotify. Ook wordt er op dezelfde manier een loop uitgevoerd om de HTML elementen aan te maken. Het resultaat ziet er als volgt uit.
+De playlists die worden weergegeven zijn, net als de liedjes, vooraf geselecteerd en worden op dezelfde manier opgehaald van de Web API van Spotify (https://api.spotify.com/v1/playlists/' + playlistId + '?market=NL). Ook wordt er op dezelfde manier een loop uitgevoerd om de HTML elementen aan te maken. Het stuk code ziet er als volgt uit:
+
+```jsx
+<h2>Playlists</h2>
+<div class="all-playlists"> 
+  {% for playlist in playlists %}
+    <section class="playlist-group">
+    <p>{{ playlist.name }}</p>
+      <div>
+        <svg onclick="playThisPlaylist('{{ playlist.id }}', 0)" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 107 107">
+          <g id="PlayWithBackground" transform="translate(-556 -630)">
+            <circle fill="#1DB954" id="BackgroundPlay" cx="53.5" cy="53.5" r="53.5" transform="translate(556 630)"/>
+            <path id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(636 650) rotate(90)" fill="#000"/>
+          </g>
+        </svg>
+        <img src = {{ playlist.images[0].url }}>
+      </div> 
+    </section>
+  {% endfor %}
+</div>
+```
+
+Het resultaat ziet er als volgt uit.
 
 <img src='./readme-files/dopify-playlists.png'>
 
 Het voornaamste verschil tussen de tracks en playlists is dat bij het aanklikken van een playlist, de gehele playlist in de queue wordt gezet. De playlist begint met afspelen bij het eerste liedje.
 
 ### Queue
-De queue wordt opgehaald door een GET request te sturen naar de bijbehorende API van Spotify. Als response wordt, logische wijs, de gehele queue terug gestuurd. De queue is opgedeeld in twee delen;Indien de queue leeg is, zal een lege array worden teruggestuurd. De response is in twee delen opgedeeld; *Now Playing* en *Next Up*. Wederom wordt de data na het ophalen gelooped, om de juiste HTML elementen te genereren. Het stuk code ziet er als volgt uit:
+De queue wordt opgehaald door een GET request te sturen naar de API van Spotify (https://api.spotify.com/v1/me/player/queue). Als response wordt, logische wijs, de gehele queue terug gestuurd. De response is in twee delen opgedeeld; *Now Playing* en *Next Up*. Indien de queue leeg is, zal een lege array worden teruggestuurd.  Wederom wordt de data na het ophalen gelooped, om de juiste HTML elementen te genereren. Het stuk code ziet er als volgt uit:
 
 ```jsx
 <div id="queueContent" class="queueRecentlyPlayedContent">
@@ -306,15 +337,81 @@ Door de juiste styling toe te passen wordt elk liedje netjes onder elkaar gezet 
 <img src='./readme-files/dopify-queue.png'>
 
 ### Recently Played
+De recent afgespeelde liedjes worden opgehaald d.m.v. een GET request te sturen naar de API van Spotify (https://api.spotify.com/v1/me/player/recently-played?limit=15). Het aantal liedjes dat wordt opgehaald staat in de URL gelimiteerd op 15, omdat er anders teveel verzoeken kunnen worden gestuurd naar de API van Spotify. Als response worden de 15 meest recente liedjes terug gestuurd, mits de API daar zin in heeft. Ik heb gemerkt dat de API niet altijd een nieuwe, ververse response terugstuurt, waardoor de recent afgespeelde liedjes niet up-to-date zijn. Dit is een issue aan de kant van Spotify, waar ik niks aan kan doen. Wederom wordt de data na het ophalen gelooped, om de juiste HTML elementen te generen.
 
+```jsx
+<div id="recentlyPlayedContent" class="queueRecentlyPlayedContent">
+  {% for track in recentlyPlayed.items %}
+    <section class="recentlyPlayed queue-group">
+      <div>
+        <svg onclick="playThisTrack('{{ track.track.album.id }}', 0)" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 107 107">
+          <g id="PlayWithBackground" transform="translate(-556 -630)">
+            <circle fill="#1DB954" id="BackgroundPlay" cx="53.5" cy="53.5" r="53.5" transform="translate(556 630)"/>
+            <path id="Play" d="M30.4,3.791a4,4,0,0,1,6.2,0L61.664,34.469A4,4,0,0,1,58.566,41H8.434a4,4,0,0,1-3.1-6.531Z" transform="translate(636 650) rotate(90)" fill="#000"/>
+          </g>
+        </svg>
+        <img class="queuePictures" src={{ track.track.album.images[1].url }}>
+      </div>
+      <b>{{ track.track.artists[0].name }}</b>
+      <p>{{ track.track.name }}</p>
+    </section>
+  {% endfor %}
+</div>
+```
+Door de juiste styling toe te passen wordt elk liedje netejs onder elkaar gezet en is het mogelijk om door het div-element te scrollen. Het resultaat ziet er als volgt uit:
 
 <img src='./readme-files/dopify-recentlyPlayed.png'>
 
 ### Notificaties
+De notificaties die de site genereerd heb ik zelf gemaakt a.d.h.v. de Web API *Notifications*. Kort gezegd, elke keer dat een nieuw liedje wordt afgespeeld, wordt er data van het liedje opgehaald. De data wordt vervolgens gebruikt om informatie in de notificatie te zetten, zoals de titel van het liedje, het bijbehorende artiest, de cover art van het liedje en een afbeelding van de artiest. Notificaties worden op de client-side gegenereerd. De notificaties worden gegenereerd a.d.h.v. de volgende code:
 
+```jsx
+let prevTrack = ''
+```
 
-### Player
+```jsx
+if (currentTrack && currentTrack.uri !== previousTrack) {
+  trackTitleElement.textContent = currentTrack.name;
+  fetch(currentTrack['artists'][0]['url'], {
+    method: 'GET',
+    headers: {
+    'Authorization': 'Bearer ' + getCookie('access_token'),
+    },
+  })
+  .then(response => {
+    // Check if the response is successful (status code 200)
+    if (response.ok) {
+    // Parse the JSON response
+    return response.json();
+    } else {
+    // If the response is not successful, throw an error
+    throw new Error('Failed to fetch data');
+    }
+  })
+  .then(data => {
+    if (Notification.permission === "granted") {
+      const trackNotification = new Notification(
+        'Now playing: '.concat(currentTrack.name + ' from ' + currentTrack['artists'][0]['name']),{
+        icon: data.images[0].url,
+        image: currentTrack.album['images'][2]["url"],
+      })
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          const trackNotification = new Notification(
+            'Now playing: '.concat(currentTrack.name + ' from ' + currentTrack['artists'][0]['name']),{
+            icon: data.images[0].url,
+            image: currentTrack.album['images'][2]["url"],
+          })
+        }
+      })
+    }
+  })
+  previousTrack = currentTrack.uri;
+}
+```
 
+Eerst wordt er gekeken of de waarde van *currentTrack.uri* (een waarde uit de opgehaalde data) overeenkomt met *previousTrack* (eerst een lege waarde dat later wordt aangevuld met de waarde van *currentTrack.uri*). Als dit niet zo is, dan betekent het dat er een nieuw liedje wordt afgespeeld en er een notificatie moet worden gegenereerd. Voordat er eenmaal een notificatie kan worden gegenereerd zal de gebruiker hier toestemming voor moeten geven. *Notification.requestPermission()* zal de browser aansturen om een pop-up te tonen met daarin de vraag of de gebruiker toestemming geeft aan de site om notificaties te tonen. Als de site toestemming heeft om notificaties te tonen, zal de site bij elk liedje een notificatie tonen en de waarde van *previousTrack* veranderen naar de waarde van *currentTrack.uri*, zodat de gebruiker niet overspoelt raakt met notificaties.
 
 ## Reflectie
 
