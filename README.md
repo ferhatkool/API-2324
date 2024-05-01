@@ -352,6 +352,10 @@ Door de juiste styling toe te passen wordt elk liedje netjes onder elkaar gezet 
 
 <img src='./readme-files/dopify-queue.png'>
 
+{Nog iets vertellen over het constant verversen van de queue en de code hiervoor}
+
+*Note: De queue bevat een bug waarbij, als de queue leeg is, deze ook leeg blijft. Voor het beste resultaat adviseer ik om op een ander afspeelapparaat een afspeellijst in de queue te zetten en dan de pagina te verversen, zodat de queue gevuld is. Hierna wordt de queue telkens geüpdatet als er nieuwe liedjes worden afgespeeld.*
+
 ### Recently Played
 De recent afgespeelde liedjes worden opgehaald d.m.v. een GET request te sturen naar de API van Spotify (https://api.spotify.com/v1/me/player/recently-played?limit=15). Het aantal liedjes dat wordt opgehaald staat in de URL gelimiteerd op 15, omdat er anders teveel verzoeken kunnen worden gestuurd naar de API van Spotify. Als response worden de 15 meest recente liedjes terug gestuurd, mits de API daar zin in heeft. Ik heb gemerkt dat de API niet altijd een nieuwe, ververse response terugstuurt, waardoor de recent afgespeelde liedjes niet up-to-date zijn. Dit is een issue aan de kant van Spotify, waar ik niks aan kan doen. Wederom wordt de data na het ophalen gelooped, om de juiste HTML elementen te generen.
 
@@ -377,6 +381,8 @@ De recent afgespeelde liedjes worden opgehaald d.m.v. een GET request te sturen 
 Door de juiste styling toe te passen wordt elk liedje netejs onder elkaar gezet en is het mogelijk om door het div-element te scrollen. Het resultaat ziet er als volgt uit:
 
 <img src='./readme-files/dopify-recentlyPlayed.png'>
+
+{Nog iets vertellen over het constant verversen van de recently played en de code hiervoor}
 
 ### Notificaties
 De notificaties die de site genereerd heb ik zelf gemaakt a.d.h.v. de Web API *Notifications*. Kort gezegd, elke keer dat een nieuw liedje wordt afgespeeld, wordt er data van het liedje opgehaald. De data wordt vervolgens gebruikt om informatie in de notificatie te zetten, zoals de titel van het liedje, het bijbehorende artiest, de cover art van het liedje en een afbeelding van de artiest. Notificaties worden op de client-side gegenereerd. De notificaties worden gegenereerd a.d.h.v. de volgende code:
@@ -430,6 +436,20 @@ if (currentTrack && currentTrack.uri !== previousTrack) {
 Eerst wordt er gekeken of de waarde van *currentTrack.uri* (een waarde uit de opgehaalde data) overeenkomt met *previousTrack* (eerst een lege waarde dat later wordt aangevuld met de waarde van *currentTrack.uri*). Als dit niet zo is, dan betekent het dat er een nieuw liedje wordt afgespeeld en er een notificatie moet worden gegenereerd. Voordat er eenmaal een notificatie kan worden gegenereerd zal de gebruiker hier toestemming voor moeten geven. *Notification.requestPermission()* zal de browser aansturen om een pop-up te tonen met daarin de vraag of de gebruiker toestemming geeft aan de site om notificaties te tonen. Als de site toestemming heeft om notificaties te tonen, zal de site bij elk liedje een notificatie tonen en de waarde van *previousTrack* veranderen naar de waarde van *currentTrack.uri*, zodat de gebruiker niet overspoelt raakt met notificaties.
 
 ## Reflectie
+Ik begon aan deze opdracht met een klein beetje basis kennis over het gebruik maken van API's. Voor het vak *Web App From Scratch* hebben we lokaal een 'API' moeten maken, waaruit JSON-data kan worden gefetched. Maar voor deze opdracht lag de focus op het gebruik maken van een externe API's, met de bijbehorende functionaliteiten. Dat was vrij nieuw voor mij, maar ik had mijn keuze al met zekerheid gemaakt; ik zou gebruik gaan maken van de Spotify API. Dit leek mij, naast de moeilijkheidsgraag, enorm interessant en leerzaam voor mijn kennis over het gebruik maken van een externe API. En dit heeft ook gebleken; ik heb naar mijn mening iets super tofs gemaakt in de korte tijd dat ik ervoor had en ik ben er enorm trots op. 
 
+Van anderen kreeg ik gedurende de minor tot nu toe te horen dat de API van Spotify erg lastig is om te gebruiken en dit heb ik aan het begin ook zo ervaren. Ik begon met het onderzoeken van hoe de API ongeveer werkt en toen ik er eenmaal een beeld bij had, ging ik de API uitproberen. Dit verliep nog vrij soepel en wat ik a.d.h.v. de guides die ik volgde van Spotify zelf heb gemaakt kreeg ik ook werkend. Toen kwam het begrijpen van wat ik nou eigenlijk had gedaan en de twee gebruikte API's 'samenvoegen' tot één geheel. Dit vond ik toch nog best wel lastig, omdat ik simpelweg een gebrek aan kennis had over API's. Het drong pas iets later tot me door hoe het werkt om verzoeken te sturen naar de Web API van Spotify en hoe ik de data uit de response kon verwerken. Maar toen ik dit eenmaal door had, gingen er mogelijkheden voor mij open en heb ik geprobeerd om zoveel mogelijk ideeën uit te werken in de korte tijd dat ik had. En naar mijn mening is dit erg goed gelukt. 
+
+Tuurlijk zijn er nog functionaliteiten die ik had willen toevoegen aan de site, maar daar had ik simpelweg de tijd niet voor om dat binnen 3/4 weken te doen. Zo had ik nog per playlist een pagina willen maken waar te zien is welke liedjes er in de playlist staan. Hiervoor had ik al in mijn hoofd bedacht hoe ik dit automatisch zou kunnen laten genereren door JavaScript, een beetje hetzelfde als hoe ik de tracks en playlists heb gegenereerd. Het is namelijk mogelijk om een dynamisch path in te stellen in LiquidJS, waarbij de naam van een pad bijvoorbeeld de naam kon zijn van de 4e opgehaalde playlist en dat alle content dynamisch werd ingeladen op de site. Een zoekfunctie zou ook nog wel leuk zijn geweest, maar dat is een erg ingewikkeld iets, aangezien er alleen verzoeken naar de API kan worden gestuurd op basis van het ID van een liedje, niet op naam... Maar ik denk dat hier wel iets op had kunnen verzinnen, mits ik genoeg tijd had. Ook had ik graag een audio visualizer willen implementeren, alleen is dit onmogelijk om te doen in combinatie met Spotify. Voor een werkende audio visualizer met JavaScript is een audio file nodig, maar omdat Spotify de audio naar de site streamed, kan JavaScript niet achterhalen hoe de audio eruit ziet en kan er dus geen audio visualizer worden gemaakt.
+
+Hieronder staan de concrete punten die ik heb geleerd tijdens het maken van de opdracht:
+- Het omgaan met een externe API, oftewel, het sturen van verzoeken naar de API en het verwerkenen van de data uit de response.
+- Het leren van de werking van Spotify.
+- Het leren omgaan met Access Tokens voor de authenticatie van een API-request. 
+- Het gebruik maken van cookies om data op te slaan of om data op te halen.
+- Het gebruik maken van LiquidJS bestanden, zoals *base.liquid* en *index.liquid*, om zo geen HTML-bestanden handmatig te maken en content dynamisch te maken.
+- Het vervangen van informatie uit bestaande HTML-elementen a.d.h.v. JavaScript.
+- Het genereren van browser notificaties.
+- Het opzetten van een JavaScript back-end server a.d.h.v. een combinatie van NodeJS, LiquidJS en Tinyhttp, zowel lokaal als gehost op een server.
 
 ## Logs
