@@ -20,6 +20,7 @@
   - [Player](#player)
 - [Eindresultaat](#eindresultaat)
   - [Startpagina](#startpagina)
+  - [Cookies](#cookies)
   - [Player](#player-1)
   - [Tracks](#tracks)
   - [Playlists](#playlists)
@@ -225,6 +226,8 @@ Als de gebruiker ingelogd is, krijgt deze gelijk de hoofdpagina te zien. De site
 
 <img src='./readme-files/dopify-homepage.png'>
 
+### Cookies
+Op de site worden drie cookies ingesteld na het inloggen; de access token, de refresh token en de display name. De access token is een bepaalde string dat bij **elke request** wordt gebruikt om het verzoek te authentiseren voor de API, omdat de API anders de request afkaatst. De access token is een uur geldig, waardoor de refresh token nodig is om een nieuwe access token aan te vragen zonder opnieuw in te loggen. De display name stel ik ook als cookie in, puur voor de functionaliteit om de naam bovenaan de hoofdpagina weer te geven. De cookie wordt natuurlijk aan de client-side opgeslagen en wordt verwijderd wanneer de gebruiker op de knop drukt om 'uit te loggen'.
 
 ### Player
 De Web Playback SDK is het fundamentele gedeelte van de site. Deze API maakt het mogelijk dat de site als 'afspeelapparaat' wordt gezien door Spotify en dit is ook op alle afspeelapparaten te zien, zoals in het voorbeeld hieronder.
@@ -359,7 +362,7 @@ Door de juiste styling toe te passen wordt elk liedje netjes onder elkaar gezet 
 
 <img src='./readme-files/dopify-queue.png'>
 
-{Nog iets vertellen over het constant verversen van de queue en de code hiervoor}
+De queue wordt telkens geüpdatet wanneer er een nieuw liedje wordt afgespeeld. Dit wordt gedaan door een functie dat bij elke 'wijziging' aan de player wordt uitgevoerd. Deze functie is client-side en fetched de huidige queue van de API en vervangt de inhoud van enkele bestaande HTML-elementen. Het gaat om de HTML-elementen waar de titel van het liedje, de artiest van het liedje, de afbeelding van de cover art en de groene play knop. Voor de titel van het liedje en de artiest wordt simpelweg de textnode van het element vervangen met de nieuwe data. Voor de afbeelding wordt de source locatie van de afbeelding vervangen voor de nieuwe en voor de groene knop wordt het ID in de onClick functie vervangen voor de nieuwe. 
 
 *Note: De queue bevat een bug waarbij, als de queue leeg is, deze ook leeg blijft. Voor het beste resultaat adviseer ik om op een ander afspeelapparaat een afspeellijst in de queue te zetten en dan de pagina te verversen, zodat de queue gevuld is. Hierna wordt de queue telkens geüpdatet als er nieuwe liedjes worden afgespeeld.*
 
@@ -388,6 +391,8 @@ De recent afgespeelde liedjes worden opgehaald d.m.v. een GET request te sturen 
 Door de juiste styling toe te passen wordt elk liedje netejs onder elkaar gezet en is het mogelijk om door het div-element te scrollen. Het resultaat ziet er als volgt uit:
 
 <img src='./readme-files/dopify-recentlyPlayed.png'>
+
+De recent afgespeelde liedjes worden op dezelfde manier vervangen als de queue, waarbij ook de inhoud van dezelfde HTML-elementen wordt vervangen. Voor een uitleg hierover, verwijs ik door naar de [queue](#queue)
 
 {Nog iets vertellen over het constant verversen van de recently played en de code hiervoor}
 
@@ -458,5 +463,3 @@ Hieronder staan de concrete punten die ik heb geleerd tijdens het maken van de o
 - Het vervangen van informatie uit bestaande HTML-elementen a.d.h.v. JavaScript.
 - Het genereren van browser notificaties.
 - Het opzetten van een JavaScript back-end server a.d.h.v. een combinatie van NodeJS, LiquidJS en Tinyhttp, zowel lokaal als gehost op een server.
-
-## Logs
