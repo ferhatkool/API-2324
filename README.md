@@ -1,6 +1,27 @@
 # API @cmda-minor-web 2023 - 2024
 <img src='./readme-files/dopify-full-1.png'>
 
+## Inhoudsopgave
+- [De opdracht](#de-opdracht)
+- [Installatie](#installatie)
+  - [Localhost](#localhost)
+  - [Publiekelijk toegankelijk](#publiekelijk-toegankelijk)
+    - [NPM Module - Localtunnel](#npm-module---localtunnel)
+    - [Apache2 i.c.m. Nginx Proxy Manager](#apache2-icm-nginx-proxy-manager)
+- [Gebruikte API's](#gebruikte-apis)
+  - [Spotify API](#spotify-api)
+  - [Web API: Notification](#web-api-notification)
+- [Schetsen / Prototypes](#schetsen--prototypes)
+  - [Schetsen](#schetsen)
+    - [Homepage](#homepage)
+    - [Playlist](#playlist)
+    - [Track/playlist banners](#trackplaylist-banners)
+  - [Authenticatie](#authenticatie)
+  - [Player](#player)
+- [Eindresultaat](#eindresultaat)
+- [Reflectie](#reflectie)
+- [Logs](#logs)
+
 ## De opdracht
 De opdracht voor het vak API ging over het leren gebruik maken van externe API's en het hosten van een back-end server a.d.h.v. NodeJS. Als API heb ik de API van Spotify gekozen, omdat ik hier graag meer over wilde leren en omdat ik graag een media player wilde maken dat daadwerkelijk functioneert als media player. 
 
@@ -138,11 +159,25 @@ Toen ik dit eenmaal doorhad, begon ik de werking van de Spotify API beter te beg
 ### Web API: Notification
 Als extra web API heb ik gebruik gemaakt van Notifications. Ik heb dit gebruikt om een browser notificatie te tonen wanneer er een nieuw nummer wordt afgespeeld. Hierdoor hoeft een gebruiker van Dopify niet de player constant open te hebben om te zien wat er afspeelt, gezien er vanuit het OS een notificatie wordt getoond. Zelf heb ik geconstateerd dat de notificaties op MacOS te kaal zijn om te kunnen gebruiken, maar op Windows wordt er in een Chromium browser netjes de notificatie getoond.
 
-## Concepten / Prototypes
-
+## Schetsen / Prototypes
+Voor deze opdracht heb ik 4 schetsen gemaakt, waarvan er drie zijn uitgewerkt in het uiteindelijke product. Naast de schetsen heb ik twee verschillende 'prototypes'; één prototype voor de authenticatie via de Spotify Authenticatie API en één voor de Spotify Web Playback SDK API. De functionaliteiten van deze twee prototypes zijn uitgewerkt in het uiteindelijke product.
 
 ### Schetsen
+#### Homepage
+Voor de hoofdpagina heb ik twee schetsen; één met de uitgeklapte wachtrij en één zonder. 
 
+<img src='./readme-files/dopify-homepage-schets-1.jpg'>
+<img src='./readme-files/dopify-homepage-schets-2.jpg'>
+
+#### Playlist
+Ik heb een schets gemaakt van een geopende playlist, waarin gescrolled kan worden en elk liedje in de playlist individueel getoond wordt met de bijbehorende informatie, zoals titel van het liedje, het album vanuit waar het liedje afkomstig is, de datum waarop het liedje aan de afspeellijst is toegevoegd, het tempo van het liedje in BPM en de duratie van het liedje.
+
+<img src='./readme-files/dopify-playlist-schets.jpg'>
+
+#### Track/Playlist banners
+Op de hoofdpagina wil ik elke track/playlist weergeven a.d.h.v. een banner, zoals ook te zien is in Spotify zelf.
+
+<img src='./readme-files/dopify-banner-schets.jpg'>
 
 ### Authenticatie
 Ik begon te experimenteren van de functionaliteiten voor de Spotify authenticatie. Hiervoor volgde ik een [guide](https://developer.spotify.com/documentation/web-api/howtos/web-app-profile) van Spotify zelf. Het resultaat was er, maar ik snapte nog niet helemaal hoe dit in zijn werking ging. Dus besloot ik om naar de verschillende concepten voor de authenticatie te kijken, die wederom van Spotify zelf waren. Het resultaat was een prototype voor de authenticatie van Spotify.
@@ -162,6 +197,9 @@ Na de authenticatie enigzins te begrijpen begon ik te rommelen met de *Web Playb
 In het prototype heb ik enkele functionaliteiten van de Spotify Player verwerkt, zoals de toggle play, pause, resume, next en previous knoppen, een werkende volume en seek (door het liedje zoeken) slider en enkele gegevens over een liedje dat aan het afspelen is, zoals de album cover, de artiest en de titel van het liedje. De knoppen werken op basis van een aangeleverde functie genaamd *player*, waarmee functies kunnen worden gemaakt die een commando versturen naar de Spotify Player API. Deze functies kunnen a.d.h.v. een onClick button worden aangeroepen. Dit zijn alleen vrij simpele functies, omdat alle code voor een bepaalde functionaliteit al door Spotify is gemaakt en wordt aangeleverd. Alleen de sliders heb ik zelf bedacht. Deze werken op basis van een script dat door *Sanne 't Hoofd* is aangeleverd voor een ander vak, waarbij de sliders een bepaalde value krijgen op een bepaalde positie. Deze value is ligt tussen de 0 en 1, om 0% en 100% aan te duiden. Vervolgens wordt deze value omgezet naar een **CSS root** waarde, wat weer in het JavaScript script wordt gebruikt om de volume en seek waarde te vermenigvuldigen met de value van de slider. Hierdoor krijg je bijvoorbeeld dat de seek waarde bij het aanklikken van een liedje 0 is en bij het selecteren van een positie in de slider de waarde van deze positie wordt vermenigvuldig met de totale duratie van het liedje. Dit resulteert in bijvoorbeeld 150000ms * 0.5, wat het huidige timestamp van het liedje verandert naar het midden van het liedje. Informatie over het liedje wordt opgehaald a.d.h.v. verzoeken naar de Spotify Player API die specifiek gericht zijn op de URL voor informatie over het huidige afspelende liedje.
 
 ## Eindresultaat
+
+
+## Reflectie
 
 
 ## Logs
